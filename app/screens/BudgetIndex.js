@@ -16,10 +16,11 @@ export default class BudgetIndex extends Component {
 
     render() {
         let height = Dimensions.get('window').height
+        const {navigate} = this.props.navigation
         return (
             <View style={styles.container}>
                 <ScrollView style={{height: height - 90}}>
-                    <TouchableOpacity style={styles.item}>
+                    <TouchableOpacity style={styles.item} onPress={() => navigate('TransactionIndex')}>
                         <View style={styles.contentLeft}>
                             <Text style={styles.title}>Essen</Text>
                         </View>
@@ -27,7 +28,7 @@ export default class BudgetIndex extends Component {
                             <Text style={styles.title}>150/300</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.item}>
+                    <TouchableOpacity style={styles.item} onPress={() => navigate('TransactionIndex')}>
                         <View style={styles.contentLeft}>
                             <Text style={styles.title}>Essen</Text>
                         </View>
@@ -35,7 +36,7 @@ export default class BudgetIndex extends Component {
                             <Text style={styles.title}>150/300</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.item}>
+                    <TouchableOpacity style={styles.item} onPress={() => navigate('TransactionIndex')}>
                         <View style={styles.contentLeft}>
                             <Text style={styles.title}>Essen</Text>
                         </View>
