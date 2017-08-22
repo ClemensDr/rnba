@@ -12,6 +12,7 @@ import CreateTransaction from './app/screens/CreateTransaction'
 import CreateBudget from './app/screens/CreateBudget'
 import TransactionExpenses from './app/screens/TransactionExpenses'
 import TransactionRevenues from './app/screens/TransactionRevenues'
+import ViewTransaction from './app/screens/ViewTransaction'
 
 const transactionMainScreen = TabNavigator({
     Expenses: {screen: TransactionExpenses},
@@ -35,7 +36,8 @@ const rnba = StackNavigator({
     BudgetIndex: {screen: BudgetIndex},
     TransactionIndex: {screen: transactionMainScreen},
     CreateBudget: {screen: CreateBudget},
-    CreateTransaction: {screen: CreateTransaction}
+    CreateTransaction: {screen: CreateTransaction},
+    ViewTransaction: {screen: ViewTransaction}
 })
 
 AppRegistry.registerComponent('rnba', () => rnba);
