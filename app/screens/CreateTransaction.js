@@ -15,8 +15,9 @@ import {
 
 export default class CreateTransaction extends Component {
     static navigationOptions = ({navigation}) => {
+        const {params} = navigation.state
         return {
-            title: 'Add a Transaction',
+            title: `${params.action === 'edit' ? 'Edit' : 'Add a'} Transaction`,
             headerRight: (
                 <TouchableOpacity onPress={() => Alert.alert('Not implemented')} style={{paddingRight: 15}}>
                     <Image source={require('../images/save.png')} style={{height: 25, width: 25}}/>

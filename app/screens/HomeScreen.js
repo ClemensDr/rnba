@@ -9,7 +9,6 @@ export default class HomeScreen extends Component {
     render() {
         const {navigate} = this.props.navigation
         return (
-            //<Button title="Budgets" onPress={() => navigate('BudgetIndex')}/>
             <View style={styles.container}>
                 <TouchableOpacity style={styles.item} onPress={() => navigate('BudgetIndex')}>
                     <Image source={require('../images/purse.png')} style={styles.icon}/>
@@ -32,7 +31,7 @@ export default class HomeScreen extends Component {
 
 let styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 1
     },
     item: {
         height: 90,
@@ -40,18 +39,14 @@ let styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: 1,
         borderBottomColor: 'grey',
-        paddingLeft: 10,
-        //backgroundColor: 'grey'
+        paddingLeft: 10
     },
     icon: {
         width: 70,
-        height: 70,
-        //backgroundColor: 'red'
-
+        height: 70
     },
     content: {
-        marginLeft: 15,
-        //backgroundColor: 'blue'
+        marginLeft: 15
     },
     title: {
         fontSize: 20,

@@ -23,7 +23,7 @@ transactionMainScreen.navigationOptions = ({navigation}) => {
     return {
         title: 'Transactions',
         headerRight: (
-            <TouchableOpacity onPress={() => navigate('CreateTransaction')}>
+            <TouchableOpacity onPress={() => navigate('CreateTransaction', {action: 'create'})}>
                 <Text style={{fontSize: 30, paddingRight: 15}}>+</Text>
             </TouchableOpacity>
         )
