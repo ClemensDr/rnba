@@ -54,7 +54,6 @@ export default class CreateBudget extends Component {
             })
             .catch(() => {
                 Alert.alert('Fehler beim speichern')
-                console.log('fehler')
             })
 
     }

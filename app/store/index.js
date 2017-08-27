@@ -22,7 +22,6 @@ export default {
     async saveBudget(budget){
         this.getAllBudgets()
             .then((budgets) => {
-            console.log(budgets)
                 budgets.data.push(budget)
                 AsyncStorage.mergeItem(BUDGET_KEY, JSON.stringify(budgets))
             })

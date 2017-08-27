@@ -30,7 +30,6 @@ export default class BudgetIndex extends Component {
     componentDidMount() {
         store.getAllBudgets()
             .then((budgets) => {
-            console.log(budgets)
                 if (budgets.data.length > 0)
                     this.setState({budgets: budgets.data})
             })
