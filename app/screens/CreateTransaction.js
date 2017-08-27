@@ -70,7 +70,7 @@ export default class CreateTransaction extends Component {
                             selectedValue={this.state.budget}>
                         <Picker.Item label="Essen" value="0"/>
                         <Picker.Item label="Feiern" value="1"/>
-                        <Picker.Item label="Drogen" value="2"/>
+                        <Picker.Item label="Wohnen" value="2"/>
                     </Picker>
                 </View>
                 <View style={styles.item}>

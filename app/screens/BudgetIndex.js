@@ -1,17 +1,51 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {Text, TouchableOpacity, View, ScrollView, StyleSheet, Dimensions} from 'react-native';
+import store from '../store'
 
 export default class BudgetIndex extends Component {
-    static navigationOptions = ({navigation}) =>{
-        const {navigate} = navigation
+    static navigationOptions = ({navigation}) => {
+        const {navigate, state} = navigation
         return {
             title: 'Budgets',
             headerRight: (
-                <TouchableOpacity onPress={() => navigate('CreateBudget')}>
+                <TouchableOpacity onPress={() => navigate('CreateBudget', {onBudgetAdded: state.params.onBudgetAdded})}>
                     <Text style={{fontSize: 30, paddingRight: 15}}>+</Text>
                 </TouchableOpacity>
             )
         }
+    }
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            budgets: [],
+            transactions: []
+        }
+        this.onBudgetAdded = this.onBudgetAdded.bind(this)
+    }
+
+    /**
+     * Beim laden der Komponente werden alle Daten zur Anzeige aus dem AsyncStorage geladen und der Navigation der Callback hinzugefügt
+     */
+    componentDidMount() {
+        store.getAllBudgets()
+            .then((budgets) => {
+            console.log(budgets)
+                if (budgets.data.length > 0)
+                    this.setState({budgets: budgets.data})
+            })
+        this.props.navigation.setParams({onBudgetAdded: this.onBudgetAdded})
+    }
+
+    /**
+     * @param budget Das neue Budget (id, name, value)
+     * Callback der ausgeführt wird, wenn ein neues Budget angelegt wurde, um die Daten aktuell zu halten
+     */
+    onBudgetAdded(budget){
+        this.setState(previousState => {
+            previousState.budgets.push(budget)
+            return {budgets: previousState.budgets}
+        })
     }
 
     render() {
@@ -20,30 +54,19 @@ export default class BudgetIndex extends Component {
         return (
             <View style={styles.container}>
                 <ScrollView style={{height: height - 90}}>
-                    <TouchableOpacity style={styles.item} onPress={() => navigate('TransactionIndex')}>
-                        <View style={styles.contentLeft}>
-                            <Text style={styles.title}>Essen</Text>
-                        </View>
-                        <View style={styles.contentRight}>
-                            <Text style={styles.title}>150/300</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.item} onPress={() => navigate('TransactionIndex')}>
-                        <View style={styles.contentLeft}>
-                            <Text style={styles.title}>Essen</Text>
-                        </View>
-                        <View style={styles.contentRight}>
-                            <Text style={styles.title}>150/300</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.item} onPress={() => navigate('TransactionIndex')}>
-                        <View style={styles.contentLeft}>
-                            <Text style={styles.title}>Essen</Text>
-                        </View>
-                        <View style={styles.contentRight}>
-                            <Text style={styles.title}>150/300</Text>
-                        </View>
-                    </TouchableOpacity>
+                    {this.state.budgets.map((budget, index) => {
+                        return (
+                            <TouchableOpacity key={index} style={styles.item}
+                                              onPress={() => navigate('TransactionIndex')}>
+                                <View style={styles.contentLeft}>
+                                    <Text style={styles.title}>{budget.name}</Text>
+                                </View>
+                                <View style={styles.contentRight}>
+                                    <Text style={styles.title}>150/{budget.value}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    })}
                 </ScrollView>
                 <View style={styles.totalBottom}>
                     <View style={styles.contentLeft}>

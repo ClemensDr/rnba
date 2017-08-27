@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, Button, TouchableOpacity, Image, StyleSheet, View} from 'react-native';
+import {Text, Button, TouchableOpacity, Image, StyleSheet, View, AsyncStorage} from 'react-native';
 
 export default class HomeScreen extends Component {
     static navigationOptions = {
@@ -27,6 +27,9 @@ export default class HomeScreen extends Component {
             </View>
         );
     }
+    /*componentDidMount(){
+        AsyncStorage.removeItem('RNBAGlobalStore:Budgets')
+    }*/
 }
 
 let styles = StyleSheet.create({
