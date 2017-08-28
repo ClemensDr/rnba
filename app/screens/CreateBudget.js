@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, Alert, Image, TouchableOpacity, View, StyleSheet, TextInput, ToastAndroid, Keyboard} from 'react-native';
-import store from '../store'
+import realm from '../database/realm'
 import {makeId} from '../helper'
 
 export default class CreateBudget extends Component {
@@ -12,7 +12,6 @@ export default class CreateBudget extends Component {
             value: -1
         }
         this.handleSave = this.handleSave.bind(this)
-        this.saveBudget = this.saveBudget.bind(this)
     }
 
     static navigationOptions = ({navigation}) => {
@@ -37,25 +36,11 @@ export default class CreateBudget extends Component {
             ToastAndroid.show('Please enter correct values', ToastAndroid.SHORT)
             return
         }
-        let id = makeId()
         const {name, value} = this.state
-        let budget = {name, value, id}
-        this.saveBudget(budget)
-            .then(() => {
-            this.props.navigation.state.params.onBudgetAdded(budget)
-            this.props.navigation.goBack()
-            })
-
-    }
-
-    async saveBudget(budget) {
-        store.saveBudget(budget)
-            .then(() => {
-            })
-            .catch(() => {
-                Alert.alert('Fehler beim speichern')
-            })
-
+        realm.write(() => {
+            realm.create('Budget', {name, value: Number.parseFloat(value), id: makeId()})
+        })
+        this.props.navigation.goBack()
     }
 
     render() {

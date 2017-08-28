@@ -27,9 +27,6 @@ export default class HomeScreen extends Component {
             </View>
         );
     }
-    /*componentDidMount(){
-        AsyncStorage.removeItem('RNBAGlobalStore:Budgets')
-    }*/
 }
 
 let styles = StyleSheet.create({
