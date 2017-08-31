@@ -1,43 +1,48 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {Text, View, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
+import realm from '../database/realm'
 
 export default class TransactionExpenses extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            transactions: []
+        }
+    }
+
+    componentDidMount() {
+        let transactions = realm.objects('Transaction')
+        this.setState({
+            transactions
+        })
+        transactions.addListener((collection, changes) => {
+            this.setState({
+                transactions: collection
+            })
+        })
+    }
 
     render() {
         const {navigate} = this.props.navigation
         return (
             <View style={styles.container}>
                 <ScrollView>
-                    <TouchableOpacity style={styles.item} onPress={() => navigate('ViewTransaction')}>
-                        <View style={styles.top}>
-                            <Text style={styles.title}>Essen</Text>
-                            <Text style={styles.amount}>30,00</Text>
-                        </View>
-                        <View style={styles.bottom}>
-                            <Text style={styles.budget}>Fixkosten</Text>
-                            <Text style={styles.date}>Feb 4, 2017</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.item} onPress={() => navigate('ViewTransaction')}>
-                        <View style={styles.top}>
-                            <Text style={styles.title}>Essen</Text>
-                            <Text style={styles.amount}>30,00</Text>
-                        </View>
-                        <View style={styles.bottom}>
-                            <Text style={styles.budget}>Fixkosten</Text>
-                            <Text style={styles.date}>Feb 4, 2017</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.item} onPress={() => navigate('ViewTransaction')}>
-                        <View style={styles.top}>
-                            <Text style={styles.title}>Essen</Text>
-                            <Text style={styles.amount}>30,00</Text>
-                        </View>
-                        <View style={styles.bottom}>
-                            <Text style={styles.budget}>Fixkosten</Text>
-                            <Text style={styles.date}>Feb 4, 2017</Text>
-                        </View>
-                    </TouchableOpacity>
+                    {this.state.transactions.map((transaction, index) => {
+                        return (
+                            <TouchableOpacity key={index} style={styles.item}
+                                              onPress={() => navigate('ViewTransaction', {transaction})}>
+                                <View style={styles.top}>
+                                    <Text style={styles.title}>{transaction.name}</Text>
+                                    <Text style={styles.amount}>{transaction.value}</Text>
+                                </View>
+                                <View style={styles.bottom}>
+                                    <Text style={styles.budget}>{transaction.budget.name}</Text>
+                                    <Text style={styles.date}>{transaction.date}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    })}
                 </ScrollView>
             </View>
         );
@@ -56,8 +61,7 @@ let styles = StyleSheet.create({
         justifyContent: 'center',
         borderBottomWidth: 1,
         borderBottomColor: 'grey',
-        paddingLeft: 10,
-        //backgroundColor: 'grey'
+        paddingLeft: 10
     },
     top: {
         flex: 1,
@@ -69,8 +73,7 @@ let styles = StyleSheet.create({
     },
     amount: {
         flex: 1,
-        fontSize: 20,
-        backgroundColor: 'powderblue'
+        fontSize: 20
     },
     title: {
         flex: 1,

@@ -17,7 +17,7 @@ export default class HomeScreen extends Component {
                         <Text>Create and manage budgets</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.item} onPress={() => navigate('TransactionIndex')}>
+                <TouchableOpacity style={styles.item} onPress={() => navigate('TransactionIndex', {budget: null})}>
                     <Image source={require('../images/transaction.png')} style={styles.icon}/>
                     <View style={styles.content}>
                         <Text style={styles.title}>Transactions</Text>

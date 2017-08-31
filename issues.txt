@@ -1,3 +1,5 @@
 BudgetIndex Screen:
  -ScrollView overflow issue, last entry is not visible on screen
  -Finish styling for transaction list
+ -Pass budget down to tab navigator screen
+ -Get context information when creating transaction if the transaction is a revenue or expense

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Text, TouchableOpacity, View, ScrollView, StyleSheet, Dimensions} from 'react-native';
+import realm from '../database/realm'
 
 export default class BudgetIndex extends Component {
     static navigationOptions = ({navigation}) => {
@@ -20,6 +21,28 @@ export default class BudgetIndex extends Component {
             budgets: [],
             transactions: []
         }
+        this._renderTotal = this._renderTotal.bind(this)
+    }
+
+    componentDidMount() {
+        let budgets = realm.objects('Budget')
+        this.setState({
+            budgets: budgets
+        })
+        budgets.addListener((collection, changes) => {
+            this.setState({
+                budgets: collection
+            })
+        })
+    }
+
+    _renderTotal(){
+        let value = 0
+        let spent = 0
+        this.state.budgets.forEach((budget) => {
+            value += budget.value
+        })
+        return value
     }
 
     render() {
@@ -31,12 +54,12 @@ export default class BudgetIndex extends Component {
                     {this.state.budgets.map((budget, index) => {
                         return (
                             <TouchableOpacity key={index} style={styles.item}
-                                              onPress={() => navigate('TransactionIndex')}>
+                                              onPress={() => navigate('TransactionIndex', {budget: budget})}>
                                 <View style={styles.contentLeft}>
                                     <Text style={styles.title}>{budget.name}</Text>
                                 </View>
                                 <View style={styles.contentRight}>
-                                    <Text style={styles.title}>150/{budget.value}</Text>
+                                    <Text style={styles.title}>0/{budget.value}</Text>
                                 </View>
                             </TouchableOpacity>
                         )
@@ -47,7 +70,7 @@ export default class BudgetIndex extends Component {
                         <Text style={styles.title}>Total</Text>
                     </View>
                     <View style={styles.contentRight}>
-                        <Text style={styles.title}>986/2000</Text>
+                        <Text style={styles.title}>986/{this._renderTotal()}</Text>
                     </View>
                 </View>
             </View>
@@ -85,7 +108,7 @@ let styles = StyleSheet.create({
         color: 'grey'
     },
     totalBottom: {
-        height: 90,
+        height: 70,
         position: 'absolute',
         bottom: 0,
         right: 0,
@@ -95,7 +118,6 @@ let styles = StyleSheet.create({
         justifyContent: 'center',
         borderTopWidth: 1,
         borderTopColor: 'grey',
-        paddingLeft: 10,
-        backgroundColor: 'powderblue'
+        paddingLeft: 10
     }
 })

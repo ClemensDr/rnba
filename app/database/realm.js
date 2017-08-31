@@ -9,8 +9,25 @@ Budget.schema = {
     properties: {
         id: 'string',
         name: 'string',
-        value: 'float'
+        value: 'float',
+        transactions: {type: 'list', objectType: 'Transaction'}
     }
 }
 
-export default new Realm({schema: [Budget]})
+class Transaction extends Realm.Object {}
+Transaction.schema = {
+    name: 'Transaction',
+    primaryKey: 'id',
+    properties: {
+        id: 'string',
+        name: 'string',
+        budget: 'Budget',
+        account: 'string',
+        value: 'float',
+        note: {type: 'string', default: ''},
+        date: 'date',
+        receipt: {type: 'string', optional: true}
+    }
+}
+
+export default new Realm({schema: [Budget, Transaction]})

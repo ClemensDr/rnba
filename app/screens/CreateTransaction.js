@@ -12,6 +12,7 @@ import {
     Keyboard,
     Button
 } from 'react-native';
+import realm from '../database/realm'
 
 export default class CreateTransaction extends Component {
     static navigationOptions = ({navigation}) => {
@@ -25,13 +26,23 @@ export default class CreateTransaction extends Component {
             )
         }
     }
-
-    componentWillMount() {
-        this.setState({
+    constructor(props){
+        super(props)
+        let budgets = realm.objects('Budget')
+        this.state = {
+            budgets,
             name: '',
             value: -1,
-            date: ''
-        })
+            date: '',
+            account: '',
+            budget: null,
+            note: '',
+        }
+    }
+    componentWillMount(){
+        let budget = this.props.navigation.state.params.budget
+        if(budget)
+            this.setState({budget})
     }
 
     async _getDateFromUser() {
@@ -52,6 +63,10 @@ export default class CreateTransaction extends Component {
         }
     }
 
+    _displayDate(){
+
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -66,8 +81,7 @@ export default class CreateTransaction extends Component {
                     <Text style={styles.title}>Budget</Text>
                     <Picker style={styles.input}
                             ref={(input) => this.budgetInput = input}
-                            onValueChange={(value, index) => this.setState({budget: value})}
-                            selectedValue={this.state.budget}>
+                            onValueChange={(value, index) => this.setState({budget: value})}>
                         <Picker.Item label="Essen" value="0"/>
                         <Picker.Item label="Feiern" value="1"/>
                         <Picker.Item label="Wohnen" value="2"/>

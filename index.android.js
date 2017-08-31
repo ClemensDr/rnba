@@ -13,28 +13,32 @@ import CreateBudget from './app/screens/CreateBudget'
 import TransactionExpenses from './app/screens/TransactionExpenses'
 import TransactionRevenues from './app/screens/TransactionRevenues'
 import ViewTransaction from './app/screens/ViewTransaction'
+import TransactionMainScreen from './app/screens/TransactionMainScreen'
 
 const transactionMainScreen = TabNavigator({
     Expenses: {screen: TransactionExpenses},
     Revenues: {screen: TransactionRevenues}
 })
 transactionMainScreen.navigationOptions = ({navigation}) => {
-    let {navigate} = navigation
+    const {navigate, state} = navigation
     return {
         title: 'Transactions',
         headerRight: (
-            <TouchableOpacity onPress={() => navigate('CreateTransaction', {action: 'create'})}>
+            <TouchableOpacity onPress={() => navigate('CreateTransaction', {action: 'create', budget: state.params.budget})}>
                 <Text style={{fontSize: 30, paddingRight: 15}}>+</Text>
             </TouchableOpacity>
         )
     }
 
 }
+/*({navigation}) =>{
+    return <TransactionMainScreen screenProps={{budget: navigation.state.params.budget}}/>
+}*/
 
 const rnba = StackNavigator({
     Home: {screen: HomeScreen},
     BudgetIndex: {screen: BudgetIndex},
-    TransactionIndex: {screen: transactionMainScreen},
+    TransactionIndex: {screen: TransactionMainScreen},
     CreateBudget: {screen: CreateBudget},
     CreateTransaction: {screen: CreateTransaction},
     ViewTransaction: {screen: ViewTransaction}
