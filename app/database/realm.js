@@ -10,7 +10,8 @@ Budget.schema = {
         id: 'string',
         name: 'string',
         value: 'float',
-        transactions: {type: 'list', objectType: 'Transaction'}
+        spent: {type: 'float', default: 0},
+        transactions: {type: 'linkingObjects', objectType: 'Transaction', property: 'budget'}
     }
 }
 
@@ -22,6 +23,7 @@ Transaction.schema = {
         id: 'string',
         name: 'string',
         budget: 'Budget',
+        type: 'string',
         account: 'string',
         value: 'float',
         note: {type: 'string', default: ''},

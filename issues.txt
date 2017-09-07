@@ -1,5 +1,6 @@
 BudgetIndex Screen:
  -ScrollView overflow issue, last entry is not visible on screen
  -Finish styling for transaction list
- -Pass budget down to tab navigator screen
- -Get context information when creating transaction if the transaction is a revenue or expense
+ -Handle Callback from realm, its using setState when the component isn't mounted...
+ -Handle number formating in create transaction and create budget
+ -Navigation to Transaction View from TabPage doesnt work

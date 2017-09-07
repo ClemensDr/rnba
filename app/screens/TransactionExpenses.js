@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
+import {Text, View, TouchableOpacity, ScrollView, StyleSheet, Alert} from 'react-native';
 import realm from '../database/realm'
 
 export default class TransactionExpenses extends Component {
@@ -12,15 +12,15 @@ export default class TransactionExpenses extends Component {
     }
 
     componentDidMount() {
-        let transactions = realm.objects('Transaction')
+        const transactions = realm.objects('Transaction')
         this.setState({
             transactions
         })
-        transactions.addListener((collection, changes) => {
+        /*transactions.addListener((collection, changes) => {
             this.setState({
                 transactions: collection
             })
-        })
+        })*/
     }
 
     render() {
@@ -31,14 +31,14 @@ export default class TransactionExpenses extends Component {
                     {this.state.transactions.map((transaction, index) => {
                         return (
                             <TouchableOpacity key={index} style={styles.item}
-                                              onPress={() => navigate('ViewTransaction', {transaction})}>
+                                              onPress={() => navigate('ViewTransaction')}>
                                 <View style={styles.top}>
                                     <Text style={styles.title}>{transaction.name}</Text>
                                     <Text style={styles.amount}>{transaction.value}</Text>
                                 </View>
                                 <View style={styles.bottom}>
                                     <Text style={styles.budget}>{transaction.budget.name}</Text>
-                                    <Text style={styles.date}>{transaction.date}</Text>
+                                    <Text style={styles.date}>{transaction.date.toDateString()}</Text>
                                 </View>
                             </TouchableOpacity>
                         )
@@ -51,8 +51,7 @@ export default class TransactionExpenses extends Component {
 
 let styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingTop: 15
+        flex: 1
     },
     item: {
         height: 70,
@@ -61,7 +60,8 @@ let styles = StyleSheet.create({
         justifyContent: 'center',
         borderBottomWidth: 1,
         borderBottomColor: 'grey',
-        paddingLeft: 10
+        paddingLeft: 10,
+        paddingTop: 15
     },
     top: {
         flex: 1,

@@ -29,11 +29,11 @@ export default class BudgetIndex extends Component {
         this.setState({
             budgets: budgets
         })
-        budgets.addListener((collection, changes) => {
+        /*budgets.addListener((collection, changes) => {
             this.setState({
                 budgets: collection
             })
-        })
+        })*/
     }
 
     _renderTotal(){
@@ -41,8 +41,9 @@ export default class BudgetIndex extends Component {
         let spent = 0
         this.state.budgets.forEach((budget) => {
             value += budget.value
+            spent += budget.spent
         })
-        return value
+        return spent + '/' + value
     }
 
     render() {
@@ -70,7 +71,7 @@ export default class BudgetIndex extends Component {
                         <Text style={styles.title}>Total</Text>
                     </View>
                     <View style={styles.contentRight}>
-                        <Text style={styles.title}>986/{this._renderTotal()}</Text>
+                        <Text style={styles.title}>{this._renderTotal()}</Text>
                     </View>
                 </View>
             </View>

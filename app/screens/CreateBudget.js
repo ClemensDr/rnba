@@ -11,7 +11,7 @@ export default class CreateBudget extends Component {
             name: '',
             value: -1
         }
-        this.handleSave = this.handleSave.bind(this)
+        this._handleSave = this._handleSave.bind(this)
     }
 
     static navigationOptions = ({navigation}) => {
@@ -27,18 +27,19 @@ export default class CreateBudget extends Component {
     }
 
     componentDidMount() {
-        this.props.navigation.setParams({onSavePressed: this.handleSave})
+        this.props.navigation.setParams({onSavePressed: this._handleSave})
     }
 
-    handleSave() {
+    _handleSave() {
         Keyboard.dismiss()
-        if (this.state.name.length < 1 || this.state.value < 0) {
+        const {name, value} = this.state
+        if (name.length < 1 || value < 0) {
             ToastAndroid.show('Please enter correct values', ToastAndroid.SHORT)
             return
         }
-        const {name, value} = this.state
+
         realm.write(() => {
-            realm.create('Budget', {name, value: Number.parseFloat(value), id: makeId()})
+            realm.create('Budget', {name, value, id: makeId()})
         })
         this.props.navigation.goBack()
     }
@@ -58,7 +59,7 @@ export default class CreateBudget extends Component {
                     <Text style={styles.title}>Value</Text>
                     <TextInput style={styles.input}
                                ref={(input) => this.valueInput = input}
-                               onChangeText={(value) => this.setState({value})}
+                               onChangeText={(value) => this.setState({value: parseFloat(value)})}
                                keyboardType="numeric"
                                returnKeyType="done"/>
                 </View>
