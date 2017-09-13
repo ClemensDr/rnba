@@ -73,9 +73,6 @@ export default class CreateTransaction extends Component {
         } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
             Keyboard.dismiss()
-            this.setState({
-                date: ''
-            })
         }
     }
     _validateForm(){

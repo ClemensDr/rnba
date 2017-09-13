@@ -21,7 +21,7 @@ export default class BudgetIndex extends Component {
     }
 
     componentWillMount(){
-        this.setState =({
+        this.setState({
             budgets: realm.objects('Budget'),
             transactions: []
         })
@@ -41,7 +41,7 @@ export default class BudgetIndex extends Component {
             value += budget.value
             spent += budget.spent
         })
-        return spent + '/' + value
+        return spent.toFixed(2) + '/' + value.toFixed(2)
     }
 
     render() {
@@ -58,7 +58,7 @@ export default class BudgetIndex extends Component {
                                     <Text style={styles.title}>{budget.name}</Text>
                                 </View>
                                 <View style={styles.contentRight}>
-                                    <Text style={styles.title}>{budget.spent}/{budget.value}</Text>
+                                    <Text style={styles.title}>{budget.spent.toFixed(2)}/{budget.value.toFixed(2)}</Text>
                                 </View>
                             </TouchableOpacity>
                         )
