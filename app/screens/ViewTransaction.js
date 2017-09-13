@@ -22,31 +22,32 @@ export default class ViewTransaction extends Component {
     }
 
     render() {
+        const {transaction} = this.props.navigation.state.params
         return (
             <View style={styles.container}>
                 <View style={styles.item}>
                     <Text style={styles.title}>Name</Text>
-                    <Text style={styles.input}>Shopping</Text>
+                    <Text style={styles.input}>{transaction.name}</Text>
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.title}>Budget</Text>
-                    <Text style={styles.input}>Freizeit</Text>
+                    <Text style={styles.input}>{transaction.budget.name}</Text>
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.title}>Account</Text>
-                    <Text style={styles.input}>Bar</Text>
+                    <Text style={styles.input}>{transaction.account}</Text>
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.title}>Value</Text>
-                    <Text style={styles.input}>43,65</Text>
+                    <Text style={styles.input}>{transaction.value.toFixed(2)}</Text>
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.title}>Note</Text>
-                    <Text style={styles.input}>Einkaufen bei H&M</Text>
+                    <Text style={styles.input}>{transaction.note}</Text>
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.title}>Date</Text>
-                    <Text style={styles.input}>Aug 23, 2017</Text>
+                    <Text style={styles.input}>{transaction.date.toDateString()}</Text>
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.title}>Receipt</Text>

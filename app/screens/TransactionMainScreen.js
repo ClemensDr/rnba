@@ -27,6 +27,7 @@ export default class TransactionMainScreen extends Component {
         super(props)
         this._canCreateTransaction = this._canCreateTransaction.bind(this)
         this._setTransactionType = this._setTransactionType.bind(this)
+        this._navigate = this._navigate.bind(this)
     }
     componentWillMount(){
         const {budget} = this.props.navigation.state.params
@@ -55,6 +56,10 @@ export default class TransactionMainScreen extends Component {
         this.props.navigation.setParams({transactionType: type})
     }
 
+    _navigate(transaction){
+        this.props.navigation.navigate('ViewTransaction', {transaction})
+    }
+
     render() {
         const TabPage = TabNavigator({
             Expenses: {screen: TransactionExpenses},
@@ -62,9 +67,9 @@ export default class TransactionMainScreen extends Component {
         })
         return (
             <TabPage screenProps={{
-                budget: this.props.navigation.state.params.budget,
                 setTransactionType: this._setTransactionType,
-                transactions: this.state.transactions
+                transactions: this.state.transactions,
+                navigate: this._navigate
             }}/>
         )
     }

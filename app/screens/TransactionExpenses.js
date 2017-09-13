@@ -15,7 +15,7 @@ export default class TransactionExpenses extends Component {
     }
 
     render() {
-        const {navigate} = this.props.navigation
+        const navigate = this.props.screenProps.navigate
         if (this.props.screenProps.transactions.length < 1) {
             return (
                 <View style={styles.centerView}>
@@ -30,7 +30,7 @@ export default class TransactionExpenses extends Component {
                         if (transaction.type === 'E') {
                             return (
                                 <TouchableOpacity key={index} style={styles.item}
-                                                  onPress={() => navigate('ViewTransaction')}>
+                                                  onPress={() => navigate(transaction)}>
                                     <View style={styles.top}>
                                         <Text style={styles.title}>{transaction.name}</Text>
                                         <Text style={styles.amount}>{transaction.value}</Text>
