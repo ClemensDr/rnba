@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
-import {Text, TouchableOpacity, View, ScrollView, StyleSheet, Dimensions, ToastAndroid} from 'react-native';
-import realm from '../database/realm'
+import React, {Component} from "react"
+import {Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native"
+import BudgetListItem from '../components/BudgetListItem'
+import realm from "../database/realm"
 
 export default class BudgetIndex extends Component {
     static navigationOptions = ({navigation}) => {
@@ -20,10 +21,9 @@ export default class BudgetIndex extends Component {
         this._renderTotal = this._renderTotal.bind(this)
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.setState({
-            budgets: realm.objects('Budget'),
-            transactions: []
+            budgets: realm.objects('Budget')
         })
         realm.addListener('change', () => {
             this.forceUpdate()
@@ -51,17 +51,8 @@ export default class BudgetIndex extends Component {
             <View style={styles.container}>
                 <ScrollView style={{height: height - 70}}>
                     {this.state.budgets.map((budget, index) => {
-                        return (
-                            <TouchableOpacity key={index} style={styles.item}
-                                              onPress={() => navigate('TransactionIndex', {budget: budget})}>
-                                <View style={styles.contentLeft}>
-                                    <Text style={styles.title}>{budget.name}</Text>
-                                </View>
-                                <View style={styles.contentRight}>
-                                    <Text style={styles.title}>{budget.spent.toFixed(2)}/{budget.value.toFixed(2)}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        )
+                        return <BudgetListItem key={index} budget={budget}
+                                               onPressed={() => navigate('TransactionIndex', {budget: budget})}/>
                     })}
                 </ScrollView>
                 <View style={styles.totalBottom}>
@@ -80,31 +71,6 @@ export default class BudgetIndex extends Component {
 let styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    item: {
-        height: 70,
-        flexDirection: 'column',
-        flex: 1,
-        justifyContent: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: 'grey',
-        paddingLeft: 10,
-        //backgroundColor: 'grey'
-    },
-    contentLeft: {
-        marginLeft: 5,
-        alignSelf: 'flex-start',
-        justifyContent: 'center',
-        //backgroundColor: 'blue'
-    },
-    contentRight: {
-        marginRight: 15,
-        alignSelf: 'flex-end',
-        //backgroundColor: 'red'
-    },
-    title: {
-        fontSize: 20,
-        color: 'grey'
     },
     totalBottom: {
         height: 70,
