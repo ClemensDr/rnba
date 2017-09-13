@@ -28,16 +28,11 @@ export default class CreateTransaction extends Component {
             )
         }
     }
-    constructor(props){
+
+    constructor(props) {
         super(props)
-        let budgets = realm.objects('Budget')
         this.state = {
-            budgets,
-            name: '',
-            value: -1,
             date: new Date(),
-            account: '',
-            budget: '',
             note: '',
             type: 'E'
         }
@@ -46,15 +41,15 @@ export default class CreateTransaction extends Component {
         this._handleSave = this._handleSave.bind(this)
         this._saveTransaction = this._saveTransaction.bind(this)
     }
-    componentWillMount(){
+
+    componentWillMount() {
         const {budget, transactionType} = this.props.navigation.state.params
-        this.setState({type: transactionType})
-        if(budget)
-            this.setState({budget: budget.id})
-        else
-            this.setState(previousState => {
-                return {budget: previousState.budgets[0].id}
-            })
+        const budgets = realm.objects('Budget')
+        this.setState({
+            budgets,
+            type: transactionType,
+            budget: budget ? budget.id : budgets[0].id
+        })
         this.props.navigation.setParams({handleSave: this._handleSave})
     }
 
@@ -62,52 +57,54 @@ export default class CreateTransaction extends Component {
         try {
             const {action, year, month, day} = await DatePickerAndroid.open({
                 date: new Date()
-            });
+            })
+            Keyboard.dismiss()
             if (action !== DatePickerAndroid.dismissedAction) {
                 this.setState({
                     date: new Date(year, month, day)
                 })
-                Keyboard.dismiss()
-
             }
         } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
             Keyboard.dismiss()
         }
     }
-    _validateForm(){
+
+    _validateForm() {
         const {name, budget, account, value} = this.state
-        return (name.length > 0 && budget.length > 0 && account.length > 0 && value > 0)
+        return (name && budget && account && value)
     }
-    _handleSave(){
+
+    _handleSave() {
         Keyboard.dismiss()
-        if(!this._validateForm()){
+        if (!this._validateForm()) {
             ToastAndroid.show('Bitte alle Werte eingeben', ToastAndroid.SHORT)
             return
         }
         this._saveTransaction()
         this.props.navigation.goBack()
     }
-    _saveTransaction(){
+
+    _saveTransaction() {
         const {name, budget, account, value, note, date, type} = this.state
         const {action} = this.props.navigation.state.params
         const budgetObj = realm.objectForPrimaryKey('Budget', budget)
         const id = makeId()
-        if(budgetObj){
-            try{
+        if (budgetObj) {
+            try {
                 realm.write(() => {
                     const ta = realm.create('Transaction', {
                         id, name, budget: null, account, value, note, date, type, receipt: null
                     })
                     ta.budget = budgetObj
-                    if(type === 'R'){
+                    if (type === 'R') {
                         budgetObj.value += value
                     }
                     else {
                         budgetObj.spent = calculateSpent(value, budgetObj.spent, action)
                     }
                 })
-            } catch(e){
+            } catch (e) {
                 console.warn(e.message)
             }
         } else {
@@ -115,7 +112,7 @@ export default class CreateTransaction extends Component {
         }
     }
 
-    _renderPickerItems(){
+    _renderPickerItems() {
         return this.state.budgets.map((budget, index) => {
             return (
                 <Picker.Item key={index} label={budget.name} value={budget.id}/>
@@ -129,14 +126,12 @@ export default class CreateTransaction extends Component {
                 <View style={styles.item}>
                     <Text style={styles.title}>Name</Text>
                     <TextInput style={styles.input}
-                               ref={(input) => this.nameInput = input}
                                onChangeText={(name) => this.setState({name})}
                                returnKeyType="done"/>
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.title}>Budget</Text>
                     <Picker style={styles.input}
-                            ref={(input) => this.budgetInput = input}
                             onValueChange={(value, index) => this.setState({budget: value})}
                             selectedValue={this.state.budget}>
                         {this._renderPickerItems()}
@@ -164,15 +159,15 @@ export default class CreateTransaction extends Component {
                     <TextInput style={styles.input}
                                ref={(input) => this.noteInput = input}
                                onChangeText={(note) => this.setState({note})}
-                               returnKeyType="done"/>
+                               onSubmitEditing={() => this.dateInput.focus()}
+                               returnKeyType="next"/>
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.title}>Date</Text>
                     <TextInput style={styles.input}
                                value={this.state.date.toDateString()}
                                ref={(input) => this.dateInput = input}
-                               onFocus={() => this._getDateFromUser()}
-                               returnKeyType="done"/>
+                               onFocus={() => this._getDateFromUser()}/>
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.title}>Receipt</Text>
