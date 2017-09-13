@@ -1,48 +1,49 @@
 import React, {Component} from 'react';
 import {Text, View, TouchableOpacity, ScrollView, StyleSheet, Alert} from 'react-native';
-import realm from '../database/realm'
 
 export default class TransactionExpenses extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            transactions: []
+            transactions: props.screenProps.transactions
         }
     }
 
-    componentDidMount() {
-        const transactions = realm.objects('Transaction')
-        this.setState({
-            transactions
-        })
-        /*transactions.addListener((collection, changes) => {
-            this.setState({
-                transactions: collection
-            })
-        })*/
+    componentDidMount(){
+        //this.props.screenProps.setTransactionType('E')
     }
 
     render() {
         const {navigate} = this.props.navigation
+        if (this.props.screenProps.transactions.length < 1) {
+            return (
+                <View style={styles.centerView}>
+                    <Text>Keine Transaktionen vorhanden</Text>
+                </View>
+            )
+        }
         return (
             <View style={styles.container}>
                 <ScrollView>
                     {this.state.transactions.map((transaction, index) => {
-                        return (
-                            <TouchableOpacity key={index} style={styles.item}
-                                              onPress={() => navigate('ViewTransaction')}>
-                                <View style={styles.top}>
-                                    <Text style={styles.title}>{transaction.name}</Text>
-                                    <Text style={styles.amount}>{transaction.value}</Text>
-                                </View>
-                                <View style={styles.bottom}>
-                                    <Text style={styles.budget}>{transaction.budget.name}</Text>
-                                    <Text style={styles.date}>{transaction.date.toDateString()}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        )
-                    })}
+                        if (transaction.type === 'E') {
+                            return (
+                                <TouchableOpacity key={index} style={styles.item}
+                                                  onPress={() => navigate('ViewTransaction')}>
+                                    <View style={styles.top}>
+                                        <Text style={styles.title}>{transaction.name}</Text>
+                                        <Text style={styles.amount}>{transaction.value}</Text>
+                                    </View>
+                                    <View style={styles.bottom}>
+                                        <Text style={styles.budget}>{transaction.budget.name}</Text>
+                                        <Text style={styles.date}>{transaction.date.toDateString()}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        }
+                    })
+                    }
                 </ScrollView>
             </View>
         );
@@ -86,5 +87,10 @@ let styles = StyleSheet.create({
     },
     date: {
         flex: 1
+    },
+    centerView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

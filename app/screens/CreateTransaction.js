@@ -14,7 +14,7 @@ import {
     ToastAndroid
 } from 'react-native';
 import realm from '../database/realm'
-import {makeId} from '../helper'
+import {makeId, calculateSpent} from '../helper'
 
 export default class CreateTransaction extends Component {
     static navigationOptions = ({navigation}) => {
@@ -93,6 +93,7 @@ export default class CreateTransaction extends Component {
     }
     _saveTransaction(){
         const {name, budget, account, value, note, date, type} = this.state
+        const {action} = this.props.navigation.state.params
         const budgetObj = realm.objectForPrimaryKey('Budget', budget)
         const id = makeId()
         if(budgetObj){
@@ -102,6 +103,12 @@ export default class CreateTransaction extends Component {
                         id, name, budget: null, account, value, note, date, type, receipt: null
                     })
                     ta.budget = budgetObj
+                    if(type === 'R'){
+                        budgetObj.value += value
+                    }
+                    else {
+                        budgetObj.spent = calculateSpent(value, budgetObj.spent, action)
+                    }
                 })
             } catch(e){
                 console.warn(e.message)

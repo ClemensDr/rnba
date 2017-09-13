@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, TouchableOpacity, View, ScrollView, StyleSheet, Dimensions} from 'react-native';
+import {Text, TouchableOpacity, View, ScrollView, StyleSheet, Dimensions, ToastAndroid} from 'react-native';
 import realm from '../database/realm'
 
 export default class BudgetIndex extends Component {
@@ -17,26 +17,24 @@ export default class BudgetIndex extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            budgets: [],
-            transactions: []
-        }
         this._renderTotal = this._renderTotal.bind(this)
     }
 
-    componentDidMount() {
-        let budgets = realm.objects('Budget')
-        this.setState({
-            budgets: budgets
+    componentWillMount(){
+        this.setState =({
+            budgets: realm.objects('Budget'),
+            transactions: []
         })
-        /*budgets.addListener((collection, changes) => {
-            this.setState({
-                budgets: collection
-            })
-        })*/
+        realm.addListener('change', () => {
+            this.forceUpdate()
+        })
     }
 
-    _renderTotal(){
+    componentWillUnmount() {
+        realm.removeAllListeners()
+    }
+
+    _renderTotal() {
         let value = 0
         let spent = 0
         this.state.budgets.forEach((budget) => {
@@ -51,7 +49,7 @@ export default class BudgetIndex extends Component {
         const {navigate} = this.props.navigation
         return (
             <View style={styles.container}>
-                <ScrollView style={{height: height - 90}}>
+                <ScrollView style={{height: height - 70}}>
                     {this.state.budgets.map((budget, index) => {
                         return (
                             <TouchableOpacity key={index} style={styles.item}
@@ -60,7 +58,7 @@ export default class BudgetIndex extends Component {
                                     <Text style={styles.title}>{budget.name}</Text>
                                 </View>
                                 <View style={styles.contentRight}>
-                                    <Text style={styles.title}>0/{budget.value}</Text>
+                                    <Text style={styles.title}>{budget.spent}/{budget.value}</Text>
                                 </View>
                             </TouchableOpacity>
                         )

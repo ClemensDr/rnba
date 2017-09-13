@@ -14,7 +14,7 @@ export default class TransactionMainScreen extends Component {
             headerRight: (
                 <TouchableOpacity onPress={() => {
                     if(!state.params.canCreateTransaction)
-                        Alert.alert('Create a budget first!')
+                        Alert.alert('Bitte zuerst ein Budget erstellen!')
                     else
                         navigate('CreateTransaction', {action: 'create', budget: state.params.budget, transactionType: state.params.transactionType})
                 }}>
@@ -29,15 +29,28 @@ export default class TransactionMainScreen extends Component {
         this._setTransactionType = this._setTransactionType.bind(this)
     }
     componentWillMount(){
+        const {budget} = this.props.navigation.state.params
+        this.setState({
+            transactions: budget ? budget.transactions : realm.objects('Transaction')
+        })
+        realm.addListener('change', () => {
+            this.forceUpdate()
+        })
         this.props.navigation.setParams({
             canCreateTransaction: this._canCreateTransaction(),
             transactionType: 'E'
         })
     }
+
+    componentWillUnmount(){
+        realm.removeAllListeners()
+    }
+
     _canCreateTransaction(){
         const budgets = realm.objects('Budget')
         return budgets.length > 0
     }
+
     _setTransactionType(type){
         this.props.navigation.setParams({transactionType: type})
     }
@@ -48,7 +61,11 @@ export default class TransactionMainScreen extends Component {
             Revenues: {screen: TransactionRevenues}
         })
         return (
-            <TabPage screenProps={{budget: this.props.navigation.state.params.budget, setTransactionType: this._setTransactionType}}/>
+            <TabPage screenProps={{
+                budget: this.props.navigation.state.params.budget,
+                setTransactionType: this._setTransactionType,
+                transactions: this.state.transactions
+            }}/>
         )
     }
 }
