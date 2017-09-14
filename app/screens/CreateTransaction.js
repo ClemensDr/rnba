@@ -1,20 +1,12 @@
 import React, {Component} from 'react';
 import {
-    Text,
-    Alert,
     Image,
     TouchableOpacity,
-    View,
-    StyleSheet,
-    TextInput,
-    Picker,
-    DatePickerAndroid,
     Keyboard,
-    Button,
     ToastAndroid
 } from 'react-native';
 import realm from '../database/realm'
-import {makeId, calculateSpent} from '../helper'
+import {createTransaction} from '../database/DatabaseHelper'
 import TransactionForm from '../components/TransactionForm'
 
 export default class CreateTransaction extends Component {
@@ -67,28 +59,11 @@ export default class CreateTransaction extends Component {
     _saveTransaction() {
         const {name, budget, account, value, note, date} = this.state.formData
         const type = this.state.type
-        const {action} = this.props.navigation.state.params
-        const budgetObj = realm.objectForPrimaryKey('Budget', budget)
-        const id = makeId()
-        if (budgetObj) {
-            try {
-                realm.write(() => {
-                    const ta = realm.create('Transaction', {
-                        id, name, budget: null, account, value, note, date, type, receipt: null
-                    })
-                    ta.budget = budgetObj
-                    if (type === 'R') {
-                        budgetObj.spent -= value
-                    }
-                    else {
-                        budgetObj.spent = calculateSpent(value, budgetObj.spent, action)
-                    }
-                })
-            } catch (e) {
-                console.warn(e.message)
-            }
-        } else {
+        const transaction = {name, budget, account, value, note, date, type, receipt: null}
+        if(!createTransaction(transaction)){
             ToastAndroid.show('Fehler beim Speichern', ToastAndroid.SHORT)
+        } else {
+            this.props.navigation.goBack()
         }
     }
 
