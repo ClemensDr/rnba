@@ -10,10 +10,6 @@ export default class TransactionExpenses extends Component {
         }
     }
 
-    componentDidMount(){
-        //this.props.screenProps.setTransactionType('E')
-    }
-
     render() {
         const navigate = this.props.screenProps.navigate
         if (this.props.screenProps.transactions.length < 1) {

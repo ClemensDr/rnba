@@ -84,5 +84,16 @@ let styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: 'grey',
         paddingLeft: 10
+    },
+    contentLeft: {
+        marginLeft: 5,
+        alignSelf: 'flex-start',
+        justifyContent: 'center',
+        //backgroundColor: 'blue'
+    },
+    contentRight: {
+        marginRight: 15,
+        alignSelf: 'flex-end',
+        //backgroundColor: 'red'
     }
 })

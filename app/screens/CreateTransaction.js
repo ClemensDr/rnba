@@ -98,7 +98,7 @@ export default class CreateTransaction extends Component {
                     })
                     ta.budget = budgetObj
                     if (type === 'R') {
-                        budgetObj.value += value
+                        budgetObj.spent -= value
                     }
                     else {
                         budgetObj.spent = calculateSpent(value, budgetObj.spent, action)

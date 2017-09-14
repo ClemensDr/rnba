@@ -53,7 +53,9 @@ export default class TransactionMainScreen extends Component {
     }
 
     _setTransactionType(type){
-        this.props.navigation.setParams({transactionType: type})
+        //this.props.navigation.setParams({transactionType: type})
+        //this.setState({type})
+        Alert.alert(''+type)
     }
 
     _navigate(transaction){
@@ -67,10 +69,12 @@ export default class TransactionMainScreen extends Component {
         })
         return (
             <TabPage screenProps={{
-                setTransactionType: this._setTransactionType,
                 transactions: this.state.transactions,
                 navigate: this._navigate
-            }}/>
+            }} onNavigationStateChange={(prevState, currentState) => {
+                this._setTransactionType(currentState.index)
+            }}
+            />
         )
     }
 }

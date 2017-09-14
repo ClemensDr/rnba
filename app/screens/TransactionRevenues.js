@@ -10,12 +10,8 @@ export default class TransactionRevenues extends Component {
         }
     }
 
-    componentDidMount(){
-        //this.props.screenProps.setTransactionType('R')
-    }
-
     render() {
-        const {navigate} = this.props.navigation
+        const navigate = this.props.screenProps.navigate
         if (this.props.screenProps.transactions.length < 1) {
             return (
                 <View style={styles.centerView}>
@@ -30,7 +26,7 @@ export default class TransactionRevenues extends Component {
                         if (transaction.type === 'R') {
                             return (
                                 <TouchableOpacity key={index} style={styles.item}
-                                                  onPress={() => navigate('ViewTransaction')}>
+                                                  onPress={() => navigate('ViewTransaction', {transaction})}>
                                     <View style={styles.top}>
                                         <Text style={styles.title}>{transaction.name}</Text>
                                         <Text style={styles.amount}>{transaction.value}</Text>

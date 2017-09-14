@@ -1,4 +1,3 @@
 BudgetIndex Screen:
  -ScrollView overflow issue, last entry is not visible on screen
  -Finish styling for transaction list
- -Handle number formating in create transaction and create budget

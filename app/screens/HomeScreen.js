@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import {Text, Button, TouchableOpacity, Image, StyleSheet, View, AsyncStorage} from 'react-native';
 
 export default class HomeScreen extends Component {
-    static navigationOptions = {
-        title: 'Budget Watch'
+    static navigationOptions = ({navigation}) => {
+        return {
+            title: 'Budget Watch'
+        }
     }
 
     render() {
