@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import realm from '../database/realm'
 import {makeId, calculateSpent} from '../helper'
+import TransactionForm from '../components/TransactionForm'
 
 export default class CreateTransaction extends Component {
     static navigationOptions = ({navigation}) => {
@@ -31,15 +32,10 @@ export default class CreateTransaction extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            date: new Date(),
-            note: '',
-            type: 'E'
-        }
-        this._renderPickerItems = this._renderPickerItems.bind(this)
         this._validateForm = this._validateForm.bind(this)
         this._handleSave = this._handleSave.bind(this)
         this._saveTransaction = this._saveTransaction.bind(this)
+        this._onDataChanged = this._onDataChanged.bind(this)
     }
 
     componentWillMount() {
@@ -47,31 +43,14 @@ export default class CreateTransaction extends Component {
         const budgets = realm.objects('Budget')
         this.setState({
             budgets,
-            type: transactionType,
-            budget: budget ? budget.id : budgets[0].id
+            formData: {},
+            type: transactionType
         })
         this.props.navigation.setParams({handleSave: this._handleSave})
     }
 
-    async _getDateFromUser() {
-        try {
-            const {action, year, month, day} = await DatePickerAndroid.open({
-                date: new Date()
-            })
-            Keyboard.dismiss()
-            if (action !== DatePickerAndroid.dismissedAction) {
-                this.setState({
-                    date: new Date(year, month, day)
-                })
-            }
-        } catch ({code, message}) {
-            console.warn('Cannot open date picker', message);
-            Keyboard.dismiss()
-        }
-    }
-
     _validateForm() {
-        const {name, budget, account, value} = this.state
+        const {name, budget, account, value} = this.state.formData
         return (name && budget && account && value)
     }
 
@@ -86,7 +65,8 @@ export default class CreateTransaction extends Component {
     }
 
     _saveTransaction() {
-        const {name, budget, account, value, note, date, type} = this.state
+        const {name, budget, account, value, note, date} = this.state.formData
+        const type = this.state.type
         const {action} = this.props.navigation.state.params
         const budgetObj = realm.objectForPrimaryKey('Budget', budget)
         const id = makeId()
@@ -112,93 +92,17 @@ export default class CreateTransaction extends Component {
         }
     }
 
-    _renderPickerItems() {
-        return this.state.budgets.map((budget, index) => {
-            return (
-                <Picker.Item key={index} label={budget.name} value={budget.id}/>
-            )
+    _onDataChanged(data){
+        this.setState({
+            formData: data
         })
     }
 
     render() {
         return (
-            <View style={styles.container}>
-                <View style={styles.item}>
-                    <Text style={styles.title}>Name</Text>
-                    <TextInput style={styles.input}
-                               onChangeText={(name) => this.setState({name})}
-                               returnKeyType="done"/>
-                </View>
-                <View style={styles.item}>
-                    <Text style={styles.title}>Budget</Text>
-                    <Picker style={styles.input}
-                            onValueChange={(value, index) => this.setState({budget: value})}
-                            selectedValue={this.state.budget}>
-                        {this._renderPickerItems()}
-                    </Picker>
-                </View>
-                <View style={styles.item}>
-                    <Text style={styles.title}>Account</Text>
-                    <TextInput style={styles.input}
-                               ref={(input) => this.accountInput = input}
-                               onChangeText={(account) => this.setState({account})}
-                               returnKeyType="next"
-                               onSubmitEditing={() => this.valueInput.focus()}/>
-                </View>
-                <View style={styles.item}>
-                    <Text style={styles.title}>Value</Text>
-                    <TextInput style={styles.input}
-                               ref={(input) => this.valueInput = input}
-                               keyboardType="numeric"
-                               onChangeText={(value) => this.setState({value: parseFloat(value)})}
-                               returnKeyType="next"
-                               onSubmitEditing={() => this.noteInput.focus()}/>
-                </View>
-                <View style={styles.item}>
-                    <Text style={styles.title}>Note</Text>
-                    <TextInput style={styles.input}
-                               ref={(input) => this.noteInput = input}
-                               onChangeText={(note) => this.setState({note})}
-                               onSubmitEditing={() => this.dateInput.focus()}
-                               returnKeyType="next"/>
-                </View>
-                <View style={styles.item}>
-                    <Text style={styles.title}>Date</Text>
-                    <TextInput style={styles.input}
-                               value={this.state.date.toDateString()}
-                               ref={(input) => this.dateInput = input}
-                               onFocus={() => this._getDateFromUser()}/>
-                </View>
-                <View style={styles.item}>
-                    <Text style={styles.title}>Receipt</Text>
-                    <View style={[styles.input, {marginRight: 15}]}>
-                        <Button title="Capture"
-                                onPress={() => Alert.alert('Not implemented')}/>
-                    </View>
-                </View>
-            </View>
-        );
+            <TransactionForm budgets={this.state.budgets}
+                             onDataChanged={(data) => this._onDataChanged(data)}
+                             budget={this.state.budget}/>
+        )
     }
 }
-
-let styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    item: {
-        height: 60,
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: 'grey',
-        paddingLeft: 10
-    },
-    input: {
-        flex: 0.8
-    },
-    title: {
-        fontSize: 18,
-        flex: 0.2,
-        color: 'grey'
-    }
-})
