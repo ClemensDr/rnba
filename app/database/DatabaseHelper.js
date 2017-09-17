@@ -94,3 +94,16 @@ export const updateTransaction = (transaction, data) => {
     }
 
 }
+
+export const createBudget = (budget) => {
+    const id = makeId()
+    budget.id = id
+    try {
+        realm.write(() => {
+            realm.create('Budget', budget)
+        })
+        return true
+    } catch(e){
+        return false
+    }
+}
