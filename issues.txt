@@ -1,3 +1,11 @@
 BudgetIndex Screen:
  -ScrollView overflow issue, last entry is not visible on screen
  -Finish styling for transaction list
+ -TouchableNativeFeedback ausprobieren
+ -Budget erstellen in DatabaseHelper auslagern -> helper.js löschen
+ -Transaktion löschen
+ -Starteite Menü Buttons
+ -Code Dokumentation
+ -APK erstellen
+ -Readme mit installation fertig machen
+

@@ -8,6 +8,7 @@ import {
     StyleSheet,
     Button
 } from 'react-native';
+import realm from '../database/realm'
 
 export default class ViewTransaction extends Component {
     static navigationOptions = ({navigation}) => {
@@ -22,8 +23,22 @@ export default class ViewTransaction extends Component {
         }
     }
 
-    render() {
+    componentWillMount(){
         const {transaction} = this.props.navigation.state.params
+        this.setState({
+            transaction: realm.objectForPrimaryKey('Transaction', transaction.id)
+        })
+        realm.addListener('change', () => {
+            this.forceUpdate()
+        })
+    }
+
+    componentWillUnmount(){
+        realm.removeAllListeners()
+    }
+
+    render() {
+        const transaction = this.state.transaction
         return (
             <View style={styles.container}>
                 <View style={styles.item}>

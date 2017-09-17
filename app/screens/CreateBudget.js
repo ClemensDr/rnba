@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, Alert, Image, TouchableOpacity, View, StyleSheet, TextInput, ToastAndroid, Keyboard} from 'react-native';
+import {Text, Image, TouchableOpacity, View, StyleSheet, TextInput, ToastAndroid, Keyboard} from 'react-native';
 import realm from '../database/realm'
 import {makeId} from '../helper'
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, ScrollView, StyleSheet, Alert} from 'react-native';
+import {Text, View, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
 
 export default class TransactionExpenses extends Component {
 

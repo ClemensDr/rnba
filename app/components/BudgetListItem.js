@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from "react";
-import {Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 
 export default class BudgetListItem extends Component{
     static propTypes = {
