@@ -6,7 +6,7 @@ export default class TransactionForm extends Component {
     static propTypes = {
         //budgets: PropTypes.object.isRequired,
         onDataChanged: PropTypes.func.isRequired,
-        budget: PropTypes.string
+        budget: PropTypes.object
     }
 
     constructor(props){
@@ -15,14 +15,23 @@ export default class TransactionForm extends Component {
         this.state = {
             date: new Date(),
             note: '',
-            budget: props.budget ? props.budget : props.budgets[0].id
+            budget: props.budget ? props.budget.id : props.budgets[0].id
         }
     }
 
     componentWillMount(){
-        this.setState({
-            budget: this.props.budget ? this.props.budget : this.props.budgets[0].id
-        })
+        const transaction = this.props.transaction
+        if(transaction){
+            this.setState({
+                name: transaction.name,
+                budget: transaction.budget.id,
+                account: transaction.account,
+                value: transaction.value,
+                note: transaction.note,
+                date: transaction.date,
+                receipt: transaction.receipt
+            })
+        }
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -62,6 +71,7 @@ export default class TransactionForm extends Component {
                 <View style={styles.item}>
                     <Text style={styles.title}>Name</Text>
                     <TextInput style={styles.input}
+                               value={this.state.name}
                                onChangeText={(name) => this.setState({name})}
                                returnKeyType="done"/>
                 </View>
@@ -76,6 +86,7 @@ export default class TransactionForm extends Component {
                 <View style={styles.item}>
                     <Text style={styles.title}>Account</Text>
                     <TextInput style={styles.input}
+                               value={this.state.account}
                                ref={(input) => this.accountInput = input}
                                onChangeText={(account) => this.setState({account})}
                                returnKeyType="next"
@@ -84,6 +95,7 @@ export default class TransactionForm extends Component {
                 <View style={styles.item}>
                     <Text style={styles.title}>Value</Text>
                     <TextInput style={styles.input}
+                               value={this.state.value ? this.state.value.toFixed() : ''}
                                ref={(input) => this.valueInput = input}
                                keyboardType="numeric"
                                onChangeText={(value) => this.setState({value: parseFloat(value)})}
@@ -93,6 +105,7 @@ export default class TransactionForm extends Component {
                 <View style={styles.item}>
                     <Text style={styles.title}>Note</Text>
                     <TextInput style={styles.input}
+                               value={this.state.note}
                                ref={(input) => this.noteInput = input}
                                onChangeText={(note) => this.setState({note})}
                                onSubmitEditing={() => this.dateInput.focus()}

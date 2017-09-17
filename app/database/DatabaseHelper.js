@@ -11,25 +11,28 @@ const makeId = () => {
 
 /**
  * @param amount Der Betrag den der Anwender in der Maske eingegeben hat
- * @param oldBudget Die Summe der Ausgaben des alten Budgets
- * @param action Aktion die bestimmt ob die Transaktion erstellt oder bearbeitet wird
- * @param oldTransaction Der alte Wert der Transaktion, muss nur übergeben werden wenn die Transaktion bearbeitet wird
+ * @param budgetSpent Die Summe der Ausgaben des Budgets
+ * @param oldAmount Der alte Wert der Transaktion, muss nur übergeben werden wenn die Transaktion bearbeitet wird
  * @returns integer Entweder das neu berechnete Budget oder der Eingabeparameter amount
  */
-const calculateSpent = (amount, oldBudget, action, oldTransaction = null) => {
-    if(action === 'create'){
-        return oldBudget + amount
-    }
-    if(action === 'edit' && oldTransaction){
-        if(amount < oldTransaction){
-            return oldBudget - (oldTransaction - amount)
+const calculateUpdatedBudget = (amount, oldAmount, budgetSpent, type) => {
+    if(type === 'E'){
+        if (amount < oldAmount) {
+            return budgetSpent - (oldAmount - amount)
         }
         else {
-            return oldBudget + (amount - oldTransaction)
+            return budgetSpent + (amount - oldAmount)
+        }
+    } else {
+        if(amount < oldAmount){
+            return budgetSpent + (oldAmount - amount)
+        } else {
+            return budgetSpent - (amount - oldAmount)
         }
     }
-    return oldBudget
+    return oldAmount
 }
+
 
 export const createTransaction = (transaction) => {
     //make id
@@ -46,14 +49,48 @@ export const createTransaction = (transaction) => {
             realm.create('Transaction', transaction)
 
             //modify budget with transaction value
-            if(transaction.type === 'E'){
+            if (transaction.type === 'E') {
                 transaction.budget.spent += transaction.value
             } else {
                 transaction.budget.spent -= transaction.value
             }
         })
         return true
-    } catch(e){
+    } catch (e) {
         return false
     }
+}
+
+export const updateTransaction = (transaction, data) => {
+    const budgetObj = realm.objectForPrimaryKey('Budget', data.budget)
+    const oldAmount = transaction.value
+    try {
+        realm.write(() => {
+            //update values
+            transaction.name = data.name
+            transaction.account = data.account
+            transaction.value = data.value
+            transaction.note = data.note
+            transaction.date = data.date
+            transaction.receipt = data.receipt
+            // calculate new budget
+            if(budgetObj.id !== transaction.budget.id){
+                if(transaction.type === 'E'){
+                    transaction.budget.spent -= transaction.value
+                    budgetObj.spent += data.value
+                } else {
+                    transaction.budget.spent += transaction.value
+                    budgetObj.spent -= data.value
+                }
+                transaction.budget = budgetObj
+            } else {
+                transaction.budget.spent = calculateUpdatedBudget(data.value, oldAmount, transaction.budget.spent, transaction.type)
+            }
+        })
+        return true
+    } catch (e) {
+        console.warn(e.message)
+        return false
+    }
+
 }

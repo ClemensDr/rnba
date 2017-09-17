@@ -6,14 +6,14 @@ import {
     ToastAndroid
 } from 'react-native';
 import realm from '../database/realm'
-import {createTransaction} from '../database/DatabaseHelper'
+import {updateTransaction} from '../database/DatabaseHelper'
 import TransactionForm from '../components/TransactionForm'
 
-export default class CreateTransaction extends Component {
+export default class UpdateTransaction extends Component {
     static navigationOptions = ({navigation}) => {
         const {params} = navigation.state
         return {
-            title: `${params.action === 'edit' ? 'Edit' : 'Add a'} Transaction`,
+            title: 'Edit a Transaction',
             headerRight: (
                 <TouchableOpacity onPress={params.handleSave} style={{paddingRight: 15}}>
                     <Image source={require('../images/save.png')} style={{height: 25, width: 25}}/>
@@ -26,18 +26,17 @@ export default class CreateTransaction extends Component {
         super(props)
         this._validateForm = this._validateForm.bind(this)
         this._handleSave = this._handleSave.bind(this)
-        this._saveTransaction = this._saveTransaction.bind(this)
+        this._updateTransaction = this._updateTransaction.bind(this)
         this._onDataChanged = this._onDataChanged.bind(this)
     }
 
     componentWillMount() {
-        const {budget, transactionType} = this.props.navigation.state.params
+        const {transaction} = this.props.navigation.state.params
         const budgets = realm.objects('Budget')
         this.setState({
             budgets,
             formData: {},
-            budget,
-            type: transactionType
+            transaction
         })
         this.props.navigation.setParams({handleSave: this._handleSave})
     }
@@ -53,14 +52,13 @@ export default class CreateTransaction extends Component {
             ToastAndroid.show('Bitte alle Werte eingeben', ToastAndroid.SHORT)
             return
         }
-        this._saveTransaction()
+        this._updateTransaction()
     }
 
-    _saveTransaction() {
+    _updateTransaction() {
         const {name, budget, account, value, note, date} = this.state.formData
-        const type = this.state.type
-        const transaction = {name, budget, account, value, note, date, type, receipt: null}
-        if(!createTransaction(transaction)){
+        const transactionData = {name, budget, account, value, note, date, receipt: null}
+        if(!updateTransaction(this.state.transaction, transactionData)){
             ToastAndroid.show('Fehler beim Speichern', ToastAndroid.SHORT)
         } else {
             this.props.navigation.goBack()
@@ -77,7 +75,7 @@ export default class CreateTransaction extends Component {
         return (
             <TransactionForm budgets={this.state.budgets}
                              onDataChanged={(data) => this._onDataChanged(data)}
-                             budget={this.state.budget} transaction={null}/>
+                             budget={this.state.budget} transaction={this.state.transaction}/>
         )
     }
 }

@@ -11,10 +11,11 @@ import {
 
 export default class ViewTransaction extends Component {
     static navigationOptions = ({navigation}) => {
+        const {transaction} = navigation.state.params
         return {
             title: 'View Transaction',
             headerRight: (
-                <TouchableOpacity onPress={() => navigation.navigate('CreateTransaction', {action: 'edit'})} style={{paddingRight: 15}}>
+                <TouchableOpacity onPress={() => navigation.navigate('UpdateTransaction', {transaction})} style={{paddingRight: 15}}>
                     <Image source={require('../images/pencil.png')} style={{height: 25, width: 25}}/>
                 </TouchableOpacity>
             )
