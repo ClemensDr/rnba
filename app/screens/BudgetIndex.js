@@ -52,7 +52,8 @@ export default class BudgetIndex extends Component {
                 <ScrollView style={{height: height - 70}}>
                     {this.state.budgets.map((budget, index) => {
                         return <BudgetListItem key={index} budget={budget}
-                                               onPressed={() => navigate('TransactionIndex', {budget: budget})}/>
+                                               onPressed={() => navigate('TransactionIndex', {budget})}
+                                               longPressed={() => navigate('ViewBudget', {budget})}/>
                     })}
                 </ScrollView>
                 <View style={styles.totalBottom}>

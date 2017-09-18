@@ -8,7 +8,7 @@ import {
     Alert
 } from 'react-native';
 import realm from '../database/realm'
-import {updateTransaction, deleteTransaktion} from '../database/DatabaseHelper'
+import {updateTransaction} from '../database/DatabaseHelper'
 import TransactionForm from '../components/TransactionForm'
 
 export default class UpdateTransaction extends Component {
@@ -36,7 +36,6 @@ export default class UpdateTransaction extends Component {
         this._updateTransaction = this._updateTransaction.bind(this)
         this._onDataChanged = this._onDataChanged.bind(this)
         this._handleDelete = this._handleDelete.bind(this)
-        this._deleteTransaction = this._deleteTransaction.bind(this)
     }
 
     componentWillMount() {
@@ -72,17 +71,8 @@ export default class UpdateTransaction extends Component {
             'Möchten Sie die Transaktion löschen?',
             [
                 {text: 'Nein', style: 'cancel'},
-                {text: 'Ja', style: 'OK', onPress: () => this._deleteTransaction()}
+                {text: 'Ja', style: 'OK'}
             ])
-    }
-
-    _deleteTransaction(){
-        this.props.navigation.navigate('TransactionIndex', {budget: null})
-        /*if(!deleteTransaktion(this.state.transaction)){
-            ToastAndroid.show('Fehler beim löschen', ToastAndroid.SHORT)
-        } else {
-            this.props.navigation.navigate('TransactionIndex')
-        }*/
     }
 
     _updateTransaction() {

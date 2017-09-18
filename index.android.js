@@ -10,6 +10,8 @@ import HomeScreen from './app/screens/HomeScreen'
 import BudgetIndex from './app/screens/BudgetIndex'
 import CreateTransaction from './app/screens/CreateTransaction'
 import CreateBudget from './app/screens/CreateBudget'
+import ViewBudget from './app/screens/ViewBudget'
+import UpdateBudget from './app/screens/UpdateBudget'
 import TransactionExpenses from './app/screens/TransactionExpenses'
 import TransactionRevenues from './app/screens/TransactionRevenues'
 import ViewTransaction from './app/screens/ViewTransaction'
@@ -39,6 +41,8 @@ transactionMainScreen.navigationOptions = ({navigation}) => {
 const rnba = StackNavigator({
     Home: {screen: HomeScreen},
     BudgetIndex: {screen: BudgetIndex},
+    ViewBudget: {screen: ViewBudget},
+    UpdateBudget: {screen: UpdateBudget},
     TransactionIndex: {screen: TransactionMainScreen},
     CreateBudget: {screen: CreateBudget},
     CreateTransaction: {screen: CreateTransaction},
