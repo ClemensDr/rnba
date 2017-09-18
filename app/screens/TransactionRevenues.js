@@ -26,7 +26,7 @@ export default class TransactionRevenues extends Component {
                         if (transaction.type === 'R') {
                             return (
                                 <TouchableOpacity key={index} style={styles.item}
-                                                  onPress={() => navigate('ViewTransaction', {transaction})}>
+                                                  onPress={() => navigate(transaction)}>
                                     <View style={styles.top}>
                                         <Text style={styles.title}>{transaction.name}</Text>
                                         <Text style={styles.amount}>{transaction.value}</Text>

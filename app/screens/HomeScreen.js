@@ -1,11 +1,38 @@
 import React, {Component} from 'react';
-import {Text, TouchableOpacity, Image, StyleSheet, View} from 'react-native';
+import {Text, TouchableOpacity, Image, StyleSheet, View, Alert, Modal, WebView} from 'react-native';
 
 export default class HomeScreen extends Component {
     static navigationOptions = ({navigation}) => {
         return {
-            title: 'Budget Watch'
+            title: 'Budget Watch',
+            headerRight: (
+                <View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
+                    <TouchableOpacity onPress={() => Alert.alert('Settings')} style={{paddingRight: 15, flex: 1}}>
+                        <Image source={require('../images/save.png')} style={{height: 25, width: 25}}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => Alert.alert('Export/Import')} style={{paddingRight: 15, flex: 1}}>
+                        <Image source={require('../images/garbage.png')} style={{height: 25, width: 25}}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.state.params.openModal(true)} style={{paddingRight: 15, flex: 1}}>
+                        <Image source={require('../images/pencil.png')} style={{height: 25, width: 25}}/>
+                    </TouchableOpacity>
+                </View>
+            )
         }
+    }
+
+    constructor(props){
+        super(props)
+        this.state = {visible: false}
+        this._setModalVisible = this._setModalVisible.bind(this)
+    }
+
+    componentWillMount(){
+        this.props.navigation.setParams({openModal: this._setModalVisible})
+    }
+
+    _setModalVisible(visible){
+        this.setState({visible})
     }
 
     render() {
@@ -26,6 +53,10 @@ export default class HomeScreen extends Component {
                         <Text>Enter transactions and revenues</Text>
                     </View>
                 </TouchableOpacity>
+                <Modal visible={this.state.visible} onRequestClose={() => this._setModalVisible(false)}>
+                    <Text style={{fontSize: 20}} onPress={() => this._setModalVisible(false)}>X Schließen</Text>
+                    <WebView source={{uri: 'https://github.com/ClemensDr/rnba/blob/master/README.md'}}/>
+                </Modal>
             </View>
         );
     }

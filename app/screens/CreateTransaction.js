@@ -37,7 +37,7 @@ export default class CreateTransaction extends Component {
             budgets,
             formData: {},
             budget,
-            type: transactionType
+            type: transactionType === 0 ? 'E' : 'R'
         })
         this.props.navigation.setParams({handleSave: this._handleSave})
     }

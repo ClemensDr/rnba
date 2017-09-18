@@ -39,7 +39,7 @@ export default class TransactionMainScreen extends Component {
         })
         this.props.navigation.setParams({
             canCreateTransaction: this._canCreateTransaction(),
-            transactionType: 'E'
+            transactionType: 0
         })
     }
 
@@ -53,9 +53,7 @@ export default class TransactionMainScreen extends Component {
     }
 
     _setTransactionType(type){
-        //this.props.navigation.setParams({transactionType: type})
-        //this.setState({type})
-        //Alert.alert(''+type)
+        this.props.navigation.setParams({transactionType: type})
     }
 
     _navigate(transaction){
