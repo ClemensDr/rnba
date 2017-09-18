@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, Image, TouchableOpacity, View, StyleSheet, TextInput, ToastAndroid, Keyboard} from 'react-native';
+import {Text, Image, TouchableOpacity, View, StyleSheet, TextInput, ToastAndroid, Keyboard, Alert} from 'react-native';
 import {updateBudget} from '../database/DatabaseHelper'
 
 export default class UpdateBudget extends Component {
@@ -13,6 +13,7 @@ export default class UpdateBudget extends Component {
             value: budget.value
         }
         this._handleSave = this._handleSave.bind(this)
+        this._handleDelete = this._handleDelete.bind(this)
     }
 
     static navigationOptions = ({navigation}) => {
@@ -20,15 +21,23 @@ export default class UpdateBudget extends Component {
         return {
             title: 'Edit a Budget',
             headerRight: (
-                <TouchableOpacity onPress={() => state.params.onSavePressed()} style={{paddingRight: 15}}>
-                    <Image source={require('../images/save.png')} style={{height: 25, width: 25}}/>
-                </TouchableOpacity>
+                <View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
+                    <TouchableOpacity onPress={() => state.params.onSavePressed()} style={{paddingRight: 15}}>
+                        <Image source={require('../images/save.png')} style={{height: 25, width: 25}}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => state.params.onDeletePressed()} style={{paddingRight: 15, flex: 1}}>
+                        <Image source={require('../images/garbage.png')} style={{height: 25, width: 25}}/>
+                    </TouchableOpacity>
+                </View>
             )
         }
     }
 
     componentDidMount() {
-        this.props.navigation.setParams({onSavePressed: this._handleSave})
+        this.props.navigation.setParams({
+            onSavePressed: this._handleSave,
+            onDeletePressed: this._handleDelete
+        })
     }
 
     _handleSave() {
@@ -38,11 +47,20 @@ export default class UpdateBudget extends Component {
             ToastAndroid.show('Please enter correct values', ToastAndroid.SHORT)
             return
         }
-        if(!updateBudget(this.state.budget, {name: this.state.name, value: this.state.value})){
+        if (!updateBudget(this.state.budget, {name: this.state.name, value: this.state.value})) {
             ToastAndroid.show('Fehler beim Speichern', ToastAndroid.SHORT)
         } else {
             this.props.navigation.navigate('BudgetIndex')
         }
+    }
+
+    _handleDelete() {
+        Alert.alert('Budget löschen',
+            'Möchten Sie das Budget löschen?',
+            [
+                {text: 'Nein', style: 'cancel'},
+                {text: 'Ja', style: 'OK'}
+            ])
     }
 
     render() {
