@@ -36,7 +36,7 @@ let styles = StyleSheet.create({
         flex: 1
     },
     item: {
-        height: 90,
+        height: 70,
         flexDirection: 'row',
         alignItems: 'center',
         borderBottomWidth: 1,
@@ -44,14 +44,14 @@ let styles = StyleSheet.create({
         paddingLeft: 10
     },
     icon: {
-        width: 70,
-        height: 70
+        width: 50,
+        height: 50
     },
     content: {
         marginLeft: 15
     },
     title: {
-        fontSize: 20,
+        fontSize: 18,
         color: 'grey'
     }
 })

@@ -1,6 +1,7 @@
 BudgetIndex Screen:
  -ScrollView overflow issue, last entry is not visible on screen
  -Finish styling for transaction list
+ -ScrollView bei Formularen
  -Transaktion löschen
  -Starteite Menü Buttons
  -Code Dokumentation

@@ -3,10 +3,12 @@ import {
     Image,
     TouchableOpacity,
     Keyboard,
-    ToastAndroid
+    ToastAndroid,
+    View,
+    Alert
 } from 'react-native';
 import realm from '../database/realm'
-import {updateTransaction} from '../database/DatabaseHelper'
+import {updateTransaction, deleteTransaktion} from '../database/DatabaseHelper'
 import TransactionForm from '../components/TransactionForm'
 
 export default class UpdateTransaction extends Component {
@@ -15,9 +17,14 @@ export default class UpdateTransaction extends Component {
         return {
             title: 'Edit a Transaction',
             headerRight: (
-                <TouchableOpacity onPress={params.handleSave} style={{paddingRight: 15}}>
-                    <Image source={require('../images/save.png')} style={{height: 25, width: 25}}/>
-                </TouchableOpacity>
+                <View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
+                    <TouchableOpacity onPress={params.handleSave} style={{paddingRight: 15, flex: 1}}>
+                        <Image source={require('../images/save.png')} style={{height: 25, width: 25}}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={params.handleDelete} style={{paddingRight: 15, flex: 1}}>
+                        <Image source={require('../images/garbage.png')} style={{height: 25, width: 25}}/>
+                    </TouchableOpacity>
+                </View>
             )
         }
     }
@@ -28,6 +35,8 @@ export default class UpdateTransaction extends Component {
         this._handleSave = this._handleSave.bind(this)
         this._updateTransaction = this._updateTransaction.bind(this)
         this._onDataChanged = this._onDataChanged.bind(this)
+        this._handleDelete = this._handleDelete.bind(this)
+        this._deleteTransaction = this._deleteTransaction.bind(this)
     }
 
     componentWillMount() {
@@ -38,7 +47,10 @@ export default class UpdateTransaction extends Component {
             formData: {},
             transaction
         })
-        this.props.navigation.setParams({handleSave: this._handleSave})
+        this.props.navigation.setParams({
+            handleSave: this._handleSave,
+            handleDelete: this._handleDelete
+        })
     }
 
     _validateForm() {
@@ -55,17 +67,35 @@ export default class UpdateTransaction extends Component {
         this._updateTransaction()
     }
 
+    _handleDelete() {
+        Alert.alert('Transaktion löschen',
+            'Möchten Sie die Transaktion löschen?',
+            [
+                {text: 'Nein', style: 'cancel'},
+                {text: 'Ja', style: 'OK', onPress: () => this._deleteTransaction()}
+            ])
+    }
+
+    _deleteTransaction(){
+        this.props.navigation.navigate('TransactionIndex', {budget: null})
+        /*if(!deleteTransaktion(this.state.transaction)){
+            ToastAndroid.show('Fehler beim löschen', ToastAndroid.SHORT)
+        } else {
+            this.props.navigation.navigate('TransactionIndex')
+        }*/
+    }
+
     _updateTransaction() {
         const {name, budget, account, value, note, date} = this.state.formData
         const transactionData = {name, budget, account, value, note, date, receipt: null}
-        if(!updateTransaction(this.state.transaction, transactionData)){
+        if (!updateTransaction(this.state.transaction, transactionData)) {
             ToastAndroid.show('Fehler beim Speichern', ToastAndroid.SHORT)
         } else {
-            this.props.navigation.goBack()
+            this.props.navigation.navigate('TransactionIndex', {budget: null})
         }
     }
 
-    _onDataChanged(data){
+    _onDataChanged(data) {
         this.setState({
             formData: data
         })

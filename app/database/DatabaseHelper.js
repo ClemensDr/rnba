@@ -33,6 +33,15 @@ const calculateUpdatedBudget = (amount, oldAmount, budgetSpent, type) => {
     return oldAmount
 }
 
+export const getTransactionById = (id) => {
+    try{
+        const transaction = realm.objectForPrimaryKey('Transaction', id)
+        return transaction
+    } catch(e){
+        return {budget: {}, value: 0}
+    }
+}
+
 
 export const createTransaction = (transaction) => {
     //make id
@@ -93,6 +102,23 @@ export const updateTransaction = (transaction, data) => {
         return false
     }
 
+}
+
+export const deleteTransaktion = (transaction) => {
+    try {
+        realm.write(() => {
+            if(transaction.type === 'E'){
+                transaction.budget.spent -= transaction.value
+            } else {
+                transaction.budget.spent += transaction.value
+            }
+            realm.delete(transaction)
+        })
+        return true
+    } catch (e){
+        //console.warn(e.message)
+        return false
+    }
 }
 
 export const createBudget = (budget) => {
