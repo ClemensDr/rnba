@@ -2,10 +2,14 @@ import React, {Component} from 'react';
 import {Text, Image, TouchableOpacity, View, StyleSheet, TextInput, ToastAndroid, Keyboard, Alert} from 'react-native';
 import {updateBudget} from '../database/DatabaseHelper'
 
+/**
+ * Screen um ein Budget zu bearbeiten
+ */
 export default class UpdateBudget extends Component {
 
     constructor(props) {
         super(props)
+        //Budget das bearbeitet werden soll
         const budget = props.navigation.state.params.budget
         this.state = {
             budget,
@@ -15,11 +19,12 @@ export default class UpdateBudget extends Component {
         this._handleSave = this._handleSave.bind(this)
         this._handleDelete = this._handleDelete.bind(this)
     }
-
+    //Navigationsoptionen
     static navigationOptions = ({navigation}) => {
         const {state} = navigation
         return {
             title: 'Edit a Budget',
+            //Buttons zum Speichern und Löschen eines Budgets
             headerRight: (
                 <View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
                     <TouchableOpacity onPress={() => state.params.onSavePressed()} style={{paddingRight: 15}}>
@@ -40,11 +45,18 @@ export default class UpdateBudget extends Component {
         })
     }
 
+    /**
+     * Speichert die Änderungen in der Datenbank. Bei fehlenden Werten, oder einem Fehler beim Speichern
+     * wird der Anwender darauf hingewiesen. Bei erfolgreicher Speicherung wird auf die Budgetübersicht navigiert
+     *
+     * @returns void
+     * @private
+     */
     _handleSave() {
         Keyboard.dismiss()
         const {name, value} = this.state
         if (name.length < 1 || value < 0) {
-            ToastAndroid.show('Please enter correct values', ToastAndroid.SHORT)
+            ToastAndroid.show('Bitte korrekte Werte angeben', ToastAndroid.SHORT)
             return
         }
         if (!updateBudget(this.state.budget, {name: this.state.name, value: this.state.value})) {
@@ -54,6 +66,11 @@ export default class UpdateBudget extends Component {
         }
     }
 
+    /**
+     * Löst den Löschvorgang aus nachdem der Anwender dies bestätigt hat. Implementiert ist nur der Alert.
+     * @returns void
+     * @private
+     */
     _handleDelete() {
         Alert.alert('Budget löschen',
             'Möchten Sie das Budget löschen?',

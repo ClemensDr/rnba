@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import {Text, View, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 
+/**
+ * Screen für den Einnahmen Tab in der Transaktionsübersicht
+ */
 export default class TransactionRevenues extends Component {
 
     constructor(props) {
         super(props)
+        //Die darzustellenden Transacktionen werden über das screenProp Prop übergeben
+        //und direkt dem State übergeben
         this.state = {
             transactions: props.screenProps.transactions
         }
@@ -12,6 +17,7 @@ export default class TransactionRevenues extends Component {
 
     render() {
         const navigate = this.props.screenProps.navigate
+        //Wenn keine Transaktionen vorhanden sind, wird ein einfacher Text angezeigt
         if (this.props.screenProps.transactions.length < 1) {
             return (
                 <View style={styles.centerView}>

@@ -1,11 +1,18 @@
 import React, {Component, PropTypes} from "react";
 import {Alert, StyleSheet, Text, TextInput, Picker, Button, View, DatePickerAndroid, Keyboard} from "react-native";
 
+/**
+ * Komponente zur Darstellung des Formulars für eine Transaktion
+ * Die Komponente ruft den Callback onDataChanged auf, wenn sich Eingaben im Formular verändern
+ */
 export default class TransactionForm extends Component {
 
     static propTypes = {
-        //budgets: PropTypes.object.isRequired,
+        //Budgets die in dem Dropdown ausgeählt werden können
+        budgets: PropTypes.object.isRequired,
+        //Callback wenn sich Daten des Formulars ändern
         onDataChanged: PropTypes.func.isRequired,
+        //Optional das Budget das der Anwender vorher bereits ausgewählt hat
         budget: PropTypes.object
     }
 
@@ -35,11 +42,20 @@ export default class TransactionForm extends Component {
     }
 
     componentDidUpdate(prevProps, prevState){
+        // Bei der Aktualisierung wird der aktuelle mit dem vorherigen State verglichen
+        // Bei Änderungen wird der Callback ausgeführt
         if(JSON.stringify(prevState) !== JSON.stringify(this.state)){
             this.props.onDataChanged(this.state)
         }
     }
 
+    /**
+     * Verwendet die DatePickerAndroid Schnittstelle für die Eingabe eines Datums
+     * Wenn der Anwender ein Datumswert auswählt wird dieser im State gespeichert
+     *
+     * @returns {Promise.<void>}
+     * @private
+     */
     async _getDateFromUser() {
         try {
             const {action, year, month, day} = await DatePickerAndroid.open({
@@ -57,6 +73,11 @@ export default class TransactionForm extends Component {
         }
     }
 
+    /**
+     * Rendert die einzelnen Elemente des Budget Dropdowns
+     *
+     * @private
+     */
     _renderPickerItems() {
         return this.props.budgets.map((budget, index) => {
             return (

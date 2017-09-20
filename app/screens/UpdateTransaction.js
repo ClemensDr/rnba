@@ -11,7 +11,11 @@ import realm from '../database/realm'
 import {updateTransaction} from '../database/DatabaseHelper'
 import TransactionForm from '../components/TransactionForm'
 
+/**
+ * Screen zur Bearbeitung einer Transaktion
+ */
 export default class UpdateTransaction extends Component {
+    //Navigationsoptionen
     static navigationOptions = ({navigation}) => {
         const {params} = navigation.state
         return {

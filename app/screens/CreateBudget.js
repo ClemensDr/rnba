@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {Text, Image, TouchableOpacity, View, StyleSheet, TextInput, ToastAndroid, Keyboard} from 'react-native';
 import {createBudget} from '../database/DatabaseHelper'
 
+/**
+ * Screen Komponente für die Erstellung eines Budgets
+ */
 export default class CreateBudget extends Component {
 
     constructor(props) {
@@ -13,6 +16,7 @@ export default class CreateBudget extends Component {
         this._handleSave = this._handleSave.bind(this)
     }
 
+    //Navigationsoptionen für diese Seite
     static navigationOptions = ({navigation}) => {
         const {state} = navigation
         return {
@@ -29,16 +33,26 @@ export default class CreateBudget extends Component {
         this.props.navigation.setParams({onSavePressed: this._handleSave})
     }
 
+    /**
+     * Wird ausgeführt sobald der Anwender auf speichern drückt. Prüft ob alle Werte korrekt sind und versucht
+     * anschließend das Budget zu erstellen. Bei Erfolg wird auf die vorherige Seite zurück navigiert. Bei einem
+     * Fehler bekommt der Anwender einen entsprechenden Hinweis angezeigt.
+     *
+     * @private
+     */
     _handleSave() {
         Keyboard.dismiss()
         const {name, value} = this.state
+        //Prüfen ob alle Werte vorhanden sind
         if (name.length < 1 || value < 0) {
             ToastAndroid.show('Please enter correct values', ToastAndroid.SHORT)
             return
         }
+        //Budget speichern
         if(!createBudget({name, value})){
             ToastAndroid.show('Fehler beim Speichern', ToastAndroid.SHORT)
         } else {
+            // Bei Erfolg zurück navigieren
             this.props.navigation.goBack()
         }
     }

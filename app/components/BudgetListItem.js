@@ -1,10 +1,17 @@
 import React, {Component, PropTypes} from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 
+/**
+ * Komponente zur Darstellung eines Budget Listenelements
+ */
 export default class BudgetListItem extends Component{
+    //Überprüft die der Komponente übergebenen Props auf den richtigen Datentyp
     static propTypes = {
+        //Das Budget das in dem Listenelement dargestellt werden soll
         budget: PropTypes.object,
+        //Callback wenn das Element gedrückt wird
         onPressed: PropTypes.func,
+        //Callback wenn das Element länger gedrückt wird --> Navigation auf die Detailseite
         longPressed: PropTypes.func
     }
 

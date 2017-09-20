@@ -1,5 +1,13 @@
+/**
+ * Abstraktion der Datenbankoperationen in eigene Funktionen
+ */
+
 import realm from './realm'
 
+/**
+ * Generiert eine zufällige zehnstellige ID als einzigartigen Schlüssel für eine Entität
+ * @returns {string} Generierte ID
+ */
 const makeId = () => {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -10,6 +18,8 @@ const makeId = () => {
 }
 
 /**
+ * Berechnet die Höhe der Ausgaben eines Budgets in Relation zum vorherigen Wert
+ *
  * @param amount Der Betrag den der Anwender in der Maske eingegeben hat
  * @param budgetSpent Die Summe der Ausgaben des Budgets
  * @param oldAmount Der alte Wert der Transaktion, muss nur übergeben werden wenn die Transaktion bearbeitet wird
@@ -33,31 +43,27 @@ const calculateUpdatedBudget = (amount, oldAmount, budgetSpent, type) => {
     return oldAmount
 }
 
-export const getTransactionById = (id) => {
-    try {
-        const transaction = realm.objectForPrimaryKey('Transaction', id)
-        return transaction
-    } catch (e) {
-        return {budget: {}, value: 0}
-    }
-}
-
-
+/**
+ * Speichert eine Transaktion in der Datenbank
+ *
+ * @param transaction Objekt mit allen Daten die für eine Transaktion benötigt werden
+ * @returns {boolean} Gibt true zurück wenn die Speicherung erfolgreich war, sonst false
+ */
 export const createTransaction = (transaction) => {
-    //make id
+    //ID erzeugen
     const id = makeId()
-    //get budget
+    //Budget laden
     const budgetObj = realm.objectForPrimaryKey('Budget', transaction.budget)
-    //set them on transaction
+    //Budget und ID der Transaktion zuweisen
     transaction.id = id
     transaction.budget = budgetObj
 
     try {
         realm.write(() => {
-            //save transaction
+            //Transaktion in die Datenbank schreiben
             realm.create('Transaction', transaction)
 
-            //modify budget with transaction value
+            //Die Höhe der Ausgaben des Budgets anpassen
             if (transaction.type === 'E') {
                 transaction.budget.spent += transaction.value
             } else {
@@ -70,19 +76,26 @@ export const createTransaction = (transaction) => {
     }
 }
 
+/**
+ * Aktualisiert eine Transaktion in der Datenbank
+ *
+ * @param transaction Die Transaktion die aktualisiert wird
+ * @param data Die geänderten Daten der Transaktion
+ * @returns {boolean} Gibt true zurück wenn die Speicherung erfolgreich war, sonst false
+ */
 export const updateTransaction = (transaction, data) => {
     const budgetObj = realm.objectForPrimaryKey('Budget', data.budget)
     const oldAmount = transaction.value
     try {
         realm.write(() => {
-            //update values
+            //Werte der Transaktion aktualisieren
             transaction.name = data.name
             transaction.account = data.account
             transaction.value = data.value
             transaction.note = data.note
             transaction.date = data.date
             transaction.receipt = data.receipt
-            // calculate new budget
+            // Berechnung der neuen Wertes im Budget
             if (budgetObj.id !== transaction.budget.id) {
                 if (transaction.type === 'E') {
                     transaction.budget.spent -= transaction.value
@@ -103,7 +116,13 @@ export const updateTransaction = (transaction, data) => {
     }
 
 }
-
+/**
+ * Löscht eine Transaktion in der Datenbank
+ * Wird nicht verwendet da eine Löschung im Moment nicht möglich ist
+ *
+ * @param transaction Transaktion die gelöscht werden soll
+ * @returns {boolean} Gibt true zurück wenn die Löschung erfolgreich war, sonst false
+ */
 export const deleteTransaktion = (transaction) => {
     try {
         realm.write(() => {
@@ -121,6 +140,12 @@ export const deleteTransaktion = (transaction) => {
     }
 }
 
+/**
+ * Speichert ein neues Budget in der Datenbank
+ *
+ * @param budget Das Budget das gespeichert werden soll
+ * @returns {boolean} Gibt true zurück wenn die Speicherung erfolgreich war, sonst false
+ */
 export const createBudget = (budget) => {
     const id = makeId()
     budget.id = id
@@ -134,6 +159,13 @@ export const createBudget = (budget) => {
     }
 }
 
+/**
+ * Aktualisiert ein Budget in der Datenbank
+ *
+ * @param budget Budget Objekt das aktualisiert werden soll
+ * @param data Geänderte Daten des Budgets
+ * @returns {boolean} Gibt true zurück wenn die Speicherung erfolgreich war, sonst false
+ */
 export const updateBudget = (budget, data) => {
     try {
         realm.write(() => {

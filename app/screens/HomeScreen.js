@@ -1,20 +1,25 @@
 import React, {Component} from 'react';
 import {Text, TouchableOpacity, Image, StyleSheet, View, Alert, Modal, WebView} from 'react-native';
 
+/**
+ * Screen Komponente für die Startseite der App
+ */
 export default class HomeScreen extends Component {
+
+    //Navigationsoptionen für diese Seite
     static navigationOptions = ({navigation}) => {
         return {
             title: 'Budget Watch',
             headerRight: (
                 <View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
                     <TouchableOpacity onPress={() => Alert.alert('Settings')} style={{paddingRight: 15, flex: 1}}>
-                        <Image source={require('../images/save.png')} style={{height: 25, width: 25}}/>
+                        <Image source={require('../images/settings.png')} style={{height: 25, width: 25}}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => Alert.alert('Export/Import')} style={{paddingRight: 15, flex: 1}}>
-                        <Image source={require('../images/garbage.png')} style={{height: 25, width: 25}}/>
+                        <Image source={require('../images/import-export-arrows.png')} style={{height: 25, width: 25}}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.state.params.openModal(true)} style={{paddingRight: 15, flex: 1}}>
-                        <Image source={require('../images/pencil.png')} style={{height: 25, width: 25}}/>
+                        <Image source={require('../images/info-sign.png')} style={{height: 25, width: 25}}/>
                     </TouchableOpacity>
                 </View>
             )
@@ -31,6 +36,12 @@ export default class HomeScreen extends Component {
         this.props.navigation.setParams({openModal: this._setModalVisible})
     }
 
+    /**
+     * Toggelt Modal mit den Informationen über die App
+     *
+     * @param visible boolean Gibt an ob das Modal geöffnet oder geschlossen ist
+     * @private
+     */
     _setModalVisible(visible){
         this.setState({visible})
     }

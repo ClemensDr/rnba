@@ -3,7 +3,12 @@ import {Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "
 import BudgetListItem from '../components/BudgetListItem'
 import realm from "../database/realm"
 
+/**
+ * Screen Komponente für die Budget Übersicht
+ */
 export default class BudgetIndex extends Component {
+
+    //Navigationsoptionen für diese Seite
     static navigationOptions = ({navigation}) => {
         const {navigate} = navigation
         return {
@@ -22,18 +27,27 @@ export default class BudgetIndex extends Component {
     }
 
     componentWillMount() {
+        // Die Budgets aus realm lesen
         this.setState({
             budgets: realm.objects('Budget')
         })
+        //Wenn sich die Budgets ändern, wird die Komponente aktualisiert
         realm.addListener('change', () => {
             this.forceUpdate()
         })
     }
 
     componentWillUnmount() {
+        //Listener entfernen wenn die Komponente nicht länger zur Laufzeit existiert
         realm.removeAllListeners()
     }
 
+    /**
+     * Berechnet die Summe der Ausgaben und Einnahmen für alle Budgets und gibt diese formatiert zurück
+     *
+     * @returns {string}
+     * @private
+     */
     _renderTotal() {
         let value = 0
         let spent = 0
@@ -89,12 +103,10 @@ let styles = StyleSheet.create({
     contentLeft: {
         marginLeft: 5,
         alignSelf: 'flex-start',
-        justifyContent: 'center',
-        //backgroundColor: 'blue'
+        justifyContent: 'center'
     },
     contentRight: {
         marginRight: 15,
-        alignSelf: 'flex-end',
-        //backgroundColor: 'red'
+        alignSelf: 'flex-end'
     }
 })

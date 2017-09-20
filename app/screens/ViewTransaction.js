@@ -9,6 +9,9 @@ import {
     Button
 } from 'react-native';
 
+/**
+ * Screen zur Anzeige einer Transaktion
+ */
 export default class ViewTransaction extends Component {
     static navigationOptions = ({navigation}) => {
         const {transaction} = navigation.state.params
@@ -23,6 +26,7 @@ export default class ViewTransaction extends Component {
     }
 
     componentWillMount(){
+        //Anzuzeigende Transaktion wird über Properties übergeben
         const {transaction} = this.props.navigation.state.params
         this.setState({
             transaction

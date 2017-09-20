@@ -8,7 +8,11 @@ import {
     StyleSheet
 } from 'react-native';
 
+/**
+ * Screen zur Anzeige eines Budgets
+ */
 export default class ViewBudget extends Component {
+    //Navigaitonsoptionen
     static navigationOptions = ({navigation}) => {
         const {budget} = navigation.state.params
         return {
