@@ -5,12 +5,15 @@
 <p>Zum Ausführen des Quellcodes in der Entwicklungsumgebung müssen für Android folgende Abhängigkeiten installiert sein: Java JDK 1.8.x,
 Python in der Version 2 oder höher und Node.js.</p>
 <p>Folgen Sie dazu den jeweiligen Installationsanweisungen der Hersteller:
-<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">JDK 8</a>
+<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">JDK 8</a>,
 <a href="https://www.python.org/downloads/">Python 3</a>,
-<a href="https://www.python.org/downloads/">Python 3</a>,
-<a href="https://nodejs.org/en/download/">Node.js</a>
+<a href="https://nodejs.org/en/download/">Node.js</a>. 
+Stellen Sie sicher dass die Installation funktioniert hat, indem Sie in der Kommandozeile ```npm -v``` ausführen.</p>
+<p>Des Weiteren muss das Android Studio installiert sein, um das virtuelle Gerät zu starten. Folgen Sie <a href="https://facebook.github.io/react-native/docs/getting-started.html">
+diesen</a> Installationsanweisungen um Android Studio zu installieren und die benötigten SDKs einzurichten. <br>
+Sobald die Installation abgeschlossen wurde und das virtuelle Gerät gestartet ist, wechseln Sie mit der Kommandozeile in das Verzeichnis des Quellcodes und führen Sie den Befehl
+```react-native run-android``` aus.
 </p>
-<p>Des Weiteren muss das Android Studio installiert sein</p>
 
 <p>Icons:</p>
 <p>
