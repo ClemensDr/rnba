@@ -10,9 +10,10 @@ Python in der Version 2 oder höher und Node.js.</p>
 <a href="https://nodejs.org/en/download/">Node.js</a>. 
 Stellen Sie sicher dass die Installation funktioniert hat, indem Sie in der Kommandozeile 'npm -v' ausführen.</p>
 <p>Des Weiteren muss das Android Studio installiert sein, um das virtuelle Gerät zu starten. Folgen Sie <a href="https://facebook.github.io/react-native/docs/getting-started.html">
-diesen</a> Installationsanweisungen um Android Studio zu installieren und die benötigten SDKs einzurichten. <br>
+diesen</a> Installationsanweisungen unter 'Building Projects with native code' um Android Studio zu installieren und die benötigten SDKs einzurichten. <br>
 Sobald die Installation abgeschlossen wurde und das virtuelle Gerät gestartet ist, wechseln Sie mit der Kommandozeile in das Verzeichnis des Quellcodes und führen Sie den Befehl
-'react-native run-android' aus.
+'react-native run-android' aus. <br>
+Alternativ dazu können Sie auch die beigelegte APK Datei auf einem Android Gerät installieren. Stellen Sie dabei sicher, dass die verwendete Android Version nicht höher als 6.0 ist.
 </p>
 
 <p>Verwendete Packages: <br>
