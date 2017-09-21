@@ -1,5 +1,5 @@
 <h1>React Native Klon der App <a href="https://github.com/brarcher/budget-watch">Budget Watch</a>.<h1>
-<h3>Diese App entstand in Rahmen der Bachelorarbeit "Möglichkeiten und Einschränkungen von React Native"</h3>
+<h3>Diese App entstand in Rahmen der Bachelorarbeit "Möglichkeiten und Einschränkungen in der Cross-Plattform Entwicklung mit React Native"</h3>
 
 <h3>Ausführen der Entwicklungsumgebung:</h3>
 <p>Zum Ausführen des Quellcodes in der Entwicklungsumgebung müssen für Android folgende Abhängigkeiten installiert sein: Java JDK 1.8.x,
@@ -11,9 +11,8 @@ Python in der Version 2 oder höher und Node.js.</p>
 Stellen Sie sicher dass die Installation funktioniert hat, indem Sie in der Kommandozeile 'npm -v' ausführen.</p>
 <p>Des Weiteren muss das Android Studio installiert sein, um das virtuelle Gerät zu starten. Folgen Sie <a href="https://facebook.github.io/react-native/docs/getting-started.html">
 diesen</a> Installationsanweisungen unter 'Building Projects with native code' um Android Studio zu installieren und die benötigten SDKs einzurichten. <br>
-Sobald die Installation abgeschlossen wurde und das virtuelle Gerät gestartet ist, wechseln Sie mit der Kommandozeile in das Verzeichnis des Quellcodes und führen Sie den Befehl
-'react-native run-android' aus. <br>
-Alternativ dazu können Sie auch die beigelegte APK Datei auf einem Android Gerät installieren. Stellen Sie dabei sicher, dass die verwendete Android Version nicht höher als 6.0 ist.
+Sobald die Installation abgeschlossen wurde und das virtuelle Gerät gestartet ist, wechseln Sie mit der Kommandozeile in das Verzeichnis des Quellcodes und führen Sie zunächst den Befehl 'npm install' aus, um die benötigten Abhängigkeiten zu installieren. Nach erfolgreicher Installation sollte im Quellcode der Ordner 'node_modules' zu sehen sein. Jetzt kann die App mit dem Befehl 'react-native run-android' auf dem virtuellen Gerät ausgeführt werden. <br>
+Alternativ dazu können Sie auch die beigelegte, signierte APK Datei auf einem physischen Android Gerät installieren. Stellen Sie dabei sicher, dass die verwendete Android Version nicht höher als 6.0 ist, damit React Native funktionsfähig ist.
 </p>
 
 <p>Verwendete Packages: <br>
